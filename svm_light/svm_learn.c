@@ -4072,7 +4072,7 @@ double estimate_sphere(MODEL *model)
   KERNEL_PARM *kernel_parm=&(model->kernel_parm);
 
   nullword.wnum=0;
-  nulldoc=create_example(-2,0,0,0.0,create_svector(&nullword,"",1.0)); 
+  nulldoc=create_example(-2,0,0,0.0,create_svector(&nullword,NULL,1.0)); 
 
   for(j=1;j<model->sv_num;j++) {
     xlen=sqrt(kernel(kernel_parm,model->supvec[j],model->supvec[j])
@@ -4095,7 +4095,7 @@ double estimate_r_delta(DOC **docs, long int totdoc, KERNEL_PARM *kernel_parm)
   WORD nullword;          /* origin of the space. */
 
   nullword.wnum=0;
-  nulldoc=create_example(-2,0,0,0.0,create_svector(&nullword,"",1.0)); 
+  nulldoc=create_example(-2,0,0,0.0,create_svector(&nullword,NULL,1.0)); 
 
   maxxlen=0;
   for(i=0;i<totdoc;i++) {
@@ -4120,7 +4120,7 @@ double estimate_r_delta_average(DOC **docs, long int totdoc,
   WORD nullword;          /* origin of the space. */
 
   nullword.wnum=0;
-  nulldoc=create_example(-2,0,0,0.0,create_svector(&nullword,"",1.0)); 
+  nulldoc=create_example(-2,0,0,0.0,create_svector(&nullword,NULL,1.0)); 
 
   avgxlen=0;
   for(i=0;i<totdoc;i++) {

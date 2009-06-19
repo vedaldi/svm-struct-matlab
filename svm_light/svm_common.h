@@ -19,6 +19,65 @@
 #ifndef SVM_COMMON
 #define SVM_COMMON
 
+#include "mex.h"
+#include <assert.h>
+
+#define malloc(x) (mxMalloc(x))
+#define realloc(x,y) (mxRealloc((x),(y)))
+#define free(x) (mxFree(x))
+
+struct MexPhiCustomImpl_
+{
+  int counter ;
+  mxArray * x ;
+  mxArray * y ;
+} ;
+
+typedef struct MexPhiCustomImpl_ * MexPhiCustom ;
+
+__inline__ static MexPhiCustom
+newMexPhiCustomFromPatternLabel (mxArray const * x, mxArray const *y)
+{
+  MexPhiCustom phi ;
+  phi = mxMalloc (sizeof(struct MexPhiCustomImpl_)) ;
+  phi -> counter = 1 ;
+  phi -> x = mxDuplicateArray (x) ;
+  phi -> y = mxDuplicateArray (y) ;
+  return phi ;
+}
+
+__inline__ static void
+releaseMexPhiCustom (MexPhiCustom phi)
+{
+  if (phi) {
+    phi -> counter -- ;
+    if (phi -> counter == 0) {
+      mxDestroyArray (phi -> x) ;
+      mxDestroyArray (phi -> y) ;
+      mxFree (phi) ;
+    }
+  }
+}
+
+__inline__ static void
+retainMexPhiCustom (MexPhiCustom phi) {
+  if (phi) {
+    phi -> counter ++ ;
+  }
+}
+
+__inline__ static mxArray * 
+MexPhiCustomGetPattern (MexPhiCustom phi) {
+  assert (phi) ;
+  return phi -> x ;
+}
+
+__inline__ static mxArray * 
+MexPhiCustomGetLabel (MexPhiCustom phi) {
+  assert (phi) ;
+  return phi -> y ;
+}
+
 # include <stdio.h>
 # include <stdint.h>
 # include <ctype.h>
@@ -66,7 +125,9 @@ typedef struct svector {
 				  interpreted as having value zero. */
   double  twonorm_sq;          /* The squared euclidian length of the
                                   vector. Used to speed up the RBF kernel. */
-  char    *userdefined;        /* You can put additional information
+  /* char    *userdefined; */
+  MexPhiCustom userdefined ;
+  /* You can put additional information
 				  here. This can be useful, if you are
 				  implementing your own kernel that
 				  does not work with feature/values
@@ -290,10 +351,10 @@ double classify_example_linear(MODEL *, DOC *);
 double kernel(KERNEL_PARM *, DOC *, DOC *); 
 double single_kernel(KERNEL_PARM *, SVECTOR *, SVECTOR *); 
 double custom_kernel(KERNEL_PARM *, SVECTOR *, SVECTOR *); 
-SVECTOR *create_svector(WORD *, char *, double);
-SVECTOR *create_svector_shallow(WORD *, char *, double);
-SVECTOR *create_svector_n(double *, long, char *, double);
-SVECTOR *create_svector_n_r(double *, long, char *, double, double);
+SVECTOR *create_svector(WORD *, MexPhiCustom, double);
+SVECTOR *create_svector_shallow(WORD *, MexPhiCustom, double);
+SVECTOR *create_svector_n(double *, long, MexPhiCustom, double);
+SVECTOR *create_svector_n_r(double *, long, MexPhiCustom, double, double);
 SVECTOR *copy_svector(SVECTOR *);
 SVECTOR *copy_svector_shallow(SVECTOR *);
 void   free_svector(SVECTOR *);

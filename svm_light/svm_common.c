@@ -109,7 +109,7 @@ double single_kernel(KERNEL_PARM *kernel_parm, SVECTOR *a, SVECTOR *b)
   }
 }
 
-SVECTOR *create_svector(WORD *words,char *userdefined,double factor)
+SVECTOR *create_svector(WORD *words, MexPhiCustom userdefined, double factor)
 {
   SVECTOR *vec;
   long    fnum,i;
@@ -126,12 +126,8 @@ SVECTOR *create_svector(WORD *words,char *userdefined,double factor)
   }
   vec->twonorm_sq=-1;
 
-  if(userdefined) {
-    vec->userdefined=(char *)my_malloc(sizeof(char)*(strlen(userdefined)+1));
-    strcpy(vec->userdefined,userdefined);
-  }
-  else 
-    vec->userdefined = NULL;
+  retainMexPhiCustom(userdefined) ;
+  vec->userdefined = userdefined ;
 
   vec->kernel_id=0;
   vec->next=NULL;
@@ -139,11 +135,13 @@ SVECTOR *create_svector(WORD *words,char *userdefined,double factor)
   return(vec);
 }
 
-SVECTOR *create_svector_shallow(WORD *words,char *userdefined,double factor)
+SVECTOR *create_svector_shallow(WORD *words,MexPhiCustom userdefined,double factor)
      /* unlike 'create_svector' this does not copy words and userdefined */
 {
   SVECTOR *vec;
-
+  
+  retainMexPhiCustom(userdefined) ;
+  
   vec = (SVECTOR *)my_malloc(sizeof(SVECTOR));
   vec->words = words;
   vec->twonorm_sq=-1;
@@ -154,12 +152,12 @@ SVECTOR *create_svector_shallow(WORD *words,char *userdefined,double factor)
   return(vec);
 }
 
-SVECTOR *create_svector_n(double *nonsparsevec, long maxfeatnum, char *userdefined, double factor)
+SVECTOR *create_svector_n(double *nonsparsevec, long maxfeatnum, MexPhiCustom userdefined, double factor)
 {
   return(create_svector_n_r(nonsparsevec,maxfeatnum,userdefined,factor,0));
 }
 
-SVECTOR *create_svector_n_r(double *nonsparsevec, long maxfeatnum, char *userdefined, double factor, double min_non_zero)
+SVECTOR *create_svector_n_r(double *nonsparsevec, long maxfeatnum, MexPhiCustom userdefined, double factor, double min_non_zero)
 {
   SVECTOR *vec;
   long    fnum,i;
@@ -181,12 +179,8 @@ SVECTOR *create_svector_n_r(double *nonsparsevec, long maxfeatnum, char *userdef
   vec->words[fnum].wnum=0;
   vec->twonorm_sq=-1;
 
-  if(userdefined) {
-    vec->userdefined=(char *)my_malloc(sizeof(char)*(strlen(userdefined)+1));
-    strcpy(vec->userdefined,userdefined);
-  }
-  else 
-    vec->userdefined = NULL;
+  retainMexPhiCustom(userdefined) ;
+  vec->userdefined = userdefined ;
 
   vec->kernel_id=0;
   vec->next=NULL;
@@ -223,8 +217,7 @@ void free_svector(SVECTOR *vec)
   while(vec) {
     if(vec->words)
       free(vec->words);
-    if(vec->userdefined)
-      free(vec->userdefined);
+    releaseMexPhiCustom (vec->userdefined) ;
     next=vec->next;
     free(vec);
     vec=next;
@@ -237,6 +230,7 @@ void free_svector_shallow(SVECTOR *vec)
   SVECTOR *next;
   while(vec) {
     next=vec->next;
+    releaseMexPhiCustom(vec->userdefined) ;
     free(vec);
     vec=next;
   }
@@ -636,7 +630,6 @@ SVECTOR* smult_s(SVECTOR *a, double factor)
     register WORD *sum,*sumi;
     register WORD *ai;
     long veclength;
-    char *userdefined=NULL;
   
     ai=a->words;
     veclength=0;
@@ -658,12 +651,7 @@ SVECTOR* smult_s(SVECTOR *a, double factor)
     }
     sumi->wnum=0;
 
-    if(a->userdefined) {
-      userdefined=(char *)my_malloc(sizeof(char)*(strlen(a->userdefined)+1));
-      strcpy(userdefined,a->userdefined);
-    }
-
-    vec=create_svector_shallow(sum,userdefined,1.0);
+    vec=create_svector_shallow(sum,a->userdefined,1.0);
     return(vec);
 }
 
@@ -674,7 +662,6 @@ SVECTOR* shift_s(SVECTOR *a, long shift)
     register WORD *sum,*sumi;
     register WORD *ai;
     long veclength;
-    char *userdefined=NULL;
   
     ai=a->words;
     veclength=0;
@@ -695,13 +682,8 @@ SVECTOR* shift_s(SVECTOR *a, long shift)
     }
     sumi->wnum=0;
 
-    if(a->userdefined) {
-      userdefined=(char *)my_malloc(sizeof(char)*(strlen(a->userdefined)+1));
-      strcpy(userdefined,a->userdefined);
-    }
-
-    vec=create_svector_shallow(sum,userdefined,a->factor);
-    return(vec);
+  vec=create_svector_shallow(sum,a->userdefined,a->factor);
+  return(vec);
 }
 
 int featvec_eq(SVECTOR *a, SVECTOR *b)
@@ -997,7 +979,7 @@ MATRIX *transpose_matrix(MATRIX *matrix)
 
 
 MATRIX *cholesky_matrix(MATRIX *A)
-/* Given a positive-definite symmetric matrix A[0..n-1][0..n-1], this routine constructs its Cholesky decomposition, A = L · LT . On input, only the upper triangle of A need be given; A is not modified. The Cholesky factor L is returned in the lower triangle. */ 
+/* Given a positive-definite symmetric matrix A[0..n-1][0..n-1], this routine constructs its Cholesky decomposition, A = L âˆ‘ LT . On input, only the upper triangle of A need be given; A is not modified. The Cholesky factor L is returned in the lower triangle. */ 
 {
   int i,j,k,n;
   double sum;
@@ -1030,7 +1012,7 @@ MATRIX *cholesky_matrix(MATRIX *A)
 }
 
 double *find_indep_subset_of_matrix(MATRIX *A, double epsilon)
-/* Given a positive-semidefinite symmetric matrix A[0..n-1][0..n-1], this routine finds a subset of rows and colums that is linear independent. To do this, it constructs the Cholesky decomposition, A = L · LT. On input, only the upper triangle of A need be given; A is not modified. The routine returns a vector in which non-zero elements indicate the linear independent subset. epsilon is the amount by which the diagonal entry of L has to be greater than zero. */ 
+/* Given a positive-semidefinite symmetric matrix A[0..n-1][0..n-1], this routine finds a subset of rows and colums that is linear independent. To do this, it constructs the Cholesky decomposition, A = L âˆ‘ LT. On input, only the upper triangle of A need be given; A is not modified. The routine returns a vector in which non-zero elements indicate the linear independent subset. epsilon is the amount by which the diagonal entry of L has to be greater than zero. */ 
 {
   int i,j,k,n;
   double sum,*indep;
@@ -1218,7 +1200,7 @@ void print_matrix(MATRIX *matrix)
 }
 
 /***************************** IO routines ***************************/
-
+#if 0
 void write_model(char *modelfile, MODEL *model)
 {
   FILE *modelfl;
@@ -1291,8 +1273,9 @@ void write_model(char *modelfile, MODEL *model)
     printf("done\n");
   }
 }
+#endif
 
-
+#if 0
 MODEL *read_model(char *modelfile)
 {
   FILE *modelfl;
@@ -1362,6 +1345,7 @@ MODEL *read_model(char *modelfile)
   }
   return(model);
 }
+#endif
 
 MODEL *copy_model(MODEL *model)
 {
@@ -1434,7 +1418,7 @@ void free_model(MODEL *model, int deep)
   free(model);
 }
 
-
+#if 0
 void read_documents(char *docfile, DOC ***docs, double **label, 
 		    long int *totwords, long int *totdoc)
 {
@@ -1631,6 +1615,7 @@ double *read_alphas(char *alphafile,long totdoc)
 
   return(alpha);
 }
+#endif
 
 void set_learning_defaults(LEARN_PARM *learn_parm, KERNEL_PARM *kernel_parm)
 {

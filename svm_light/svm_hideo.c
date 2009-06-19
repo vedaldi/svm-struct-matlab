@@ -31,7 +31,7 @@
 
 /* Common Block Declarations */
 
-long verbosity;
+/* long verbosity; */
 
 # define PRIMAL_OPTIMAL      1
 # define DUAL_OPTIMAL        2
@@ -83,6 +83,27 @@ void lswitchrk_matrix(double *, long, long, long);
 double calculate_qp_objective(long, double *, double *, double *);
 
 
+void init_qp_solver()
+{
+  primal = 0 ;
+  dual = 0 ;
+  precision_violations = 0 ;
+  opt_precision = DEF_PRECISION ;
+  maxiter = DEF_MAX_ITERATIONS ;
+  lindep_sensitivity = DEF_LINDEP_SENSITIVITY ;
+  buffer = 0 ;
+  nonoptimal = 0 ;
+  smallroundcount = 0 ;
+  roundnumber = 0 ;
+}
+
+void free_qp_solver()
+{
+  if(buffer) {free(buffer) ; buffer = 0 ;}
+  if(nonoptimal) {free(nonoptimal) ; nonoptimal = 0; }
+  if(dual) {free(dual) ; dual = 0 ;}
+  if(primal) {free(primal) ; primal = 0;}
+}
 
 double *optimize_qp(qp,epsilon_crit,nx,threshold,learn_parm)
 QP *qp;

@@ -1,56 +1,94 @@
-# Makefile for empty SVM-struct API, 03.10.06
+# file:   Makefile
+# brief:  Compile MEXified SVM-struct
+# author: Andrea Vedaldi
 
-#Call 'make' using the following line to make CYGWIN produce stand-alone Windows executables
-#		make 'SFLAGS=-mno-cygwin'
+MEX ?= mex
+MATLABROOT := $(shell $(MEX) -v 2>&1 | grep "MATLAB  * =" | sed 's/->.*= //g')
+MEXEXT := $(shell $(MATLABROOT)/bin/mexext)
+MEXFLAGS := -largeArrayDims CFLAGS='$$CFLAGS $(CFLAGS) -Wall'
 
-#Use the following to compile under unix or cygwin
-CC = gcc
-LD = gcc
+.PHONY: all
+all: svm_struct_learn.$(MEXEXT)
 
-CFLAGS =   $(SFLAGS) -O3 -fomit-frame-pointer -ffast-math -Wall 
-LDFLAGS =  $(SFLAGS) -O3 -lm -Wall
-#CFLAGS =  $(SFLAGS) -pg -Wall
-#LDFLAGS = $(SFLAGS) -pg -lm -Wall 
+svm_light_objs := \
+  svm_light/svm_hideo.o \
+  svm_light/svm_learn.o \
+  svm_light/svm_common.o
 
-all: svm_empty_learn svm_empty_classify
+svm_struct_objs := \
+  svm_struct/svm_struct_learn.o \
+  svm_struct/svm_struct_common.o
+
+svm_custom_objs := \
+  svm_struct_api.o \
+  svm_struct_learn_custom.o
+
+%.o : %.c
+	$(MEX) $(MEXFLAGS) -outdir "$(dir $@)" -c "$<"
+	
+svm_struct_learn.$(MEXEXT) : svm_struct_learn_mex.c \
+  $(svm_custom_objs) \
+  $(svm_light_objs) \
+  $(svm_struct_objs)
+	$(MEX) $(MEXFLAGS) $^ -output "$@"
 
 .PHONY: clean
-clean: svm_light_clean svm_struct_clean
-	rm -f *.o *.tcov *.d core gmon.out *.stackdump 
+clean:
+	rm -fv $(svm_custom_objs) $(svm_struct_objs) $(svm_light_objs)
 
-#-----------------------#
-#----   SVM-light   ----#
-#-----------------------#
-svm_light_hideo_noexe: 
-	cd svm_light; make svm_learn_hideo_noexe
+.PHONY: distclean
+distclean: clean
+	rm -fv svm_struct_learn.$(MEXEXT)
 
-svm_light_clean: 
-	cd svm_light; make clean
+# svm_struct dependencies
+svm_struct_api.o: \
+  svm_struct_api.c \
+  svm_struct_api.h \
+  svm_struct_api_types.h \
+  svm_struct/svm_struct_common.h
 
-#----------------------#
-#----  STRUCT SVM  ----#
-#----------------------#
+svm_struct_learn_custom.o: \
+  svm_struct_learn_custom.c \
+  svm_struct_api.h \
+  svm_struct_api_types.h \
+  svm_light/svm_common.h \
+  svm_struct/svm_struct_common.h
 
-svm_struct_noexe: 
-	cd svm_struct; make svm_struct_noexe
+svm_struct/svm_struct_mex.o : \
+  svm_struct/svm_struct_mex.c
 
-svm_struct_clean: 
-	cd svm_struct; make clean
+svm_struct/svm_struct_common.o : \
+  svm_struct/svm_struct_common.c \
+  svm_struct/svm_struct_common.h \
+  svm_light/svm_common.h \
+  svm_struct_api_types.h
 
+svm_struct/svm_struct_learn.o : \
+  svm_struct/svm_struct_learn.c \
+  svm_struct/svm_struct_common.h \
+  svm_light/svm_common.h \
+  svm_light/svm_learn.h \
+  svm_struct_api_types.h \
+  svm_struct_api.h
 
-#-------------------------#
-#----  SVM empty API  ----#
-#-------------------------#
+svm_struct/svm_struct_classify.o : \
+  svm_struct/svm_struct_classify.c \
+  svm_struct/svm_struct_common.h \
+  svm_light/svm_common.h \
+  svm_struct_api_types.h \
+  svm_struct_api.h
 
-svm_empty_classify: svm_light_hideo_noexe svm_struct_noexe svm_struct_api.o svm_struct/svm_struct_classify.o svm_struct/svm_struct_common.o svm_struct/svm_struct_main.o 
-	$(LD) $(LDFLAGS) svm_struct_api.o svm_struct/svm_struct_classify.o svm_light/svm_common.o svm_struct/svm_struct_common.o -o svm_empty_classify $(LIBS)
+# svm_light dependencies
+svm_light/svm_learn.o : \
+  svm_light/svm_learn.c \
+  svm_light/svm_learn.h \
+  svm_light/svm_common.h
 
-svm_empty_learn: svm_light_hideo_noexe svm_struct_noexe svm_struct_api.o svm_struct_learn_custom.o svm_struct/svm_struct_learn.o svm_struct/svm_struct_common.o svm_struct/svm_struct_main.o
-	$(LD) $(LDFLAGS) svm_struct/svm_struct_learn.o svm_struct_learn_custom.o svm_struct_api.o svm_light/svm_hideo.o svm_light/svm_learn.o svm_light/svm_common.o svm_struct/svm_struct_common.o svm_struct/svm_struct_main.o -o svm_empty_learn $(LIBS)
+svm_light/svm_common.o : \
+  svm_light/svm_common.c \
+  svm_light/svm_common.h \
+  svm_light/kernel.h
 
+svm_light/svm_hideo.o : \
+  svm_light/svm_hideo.c
 
-svm_struct_api.o: svm_struct_api.c svm_struct_api.h svm_struct_api_types.h svm_struct/svm_struct_common.h
-	$(CC) -c $(CFLAGS) svm_struct_api.c -o svm_struct_api.o
-
-svm_struct_learn_custom.o: svm_struct_learn_custom.c svm_struct_api.h svm_light/svm_common.h svm_struct_api_types.h svm_struct/svm_struct_common.h
-	$(CC) -c $(CFLAGS) svm_struct_learn_custom.c -o svm_struct_learn_custom.o
