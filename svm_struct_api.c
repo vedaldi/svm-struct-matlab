@@ -267,12 +267,11 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
   destroyMxArrayEncapsulatingSmodel (model_array) ;
 
   if (status) {
-    char str [1024] ;
-    mxArray * str_array ;
-    mexCallMATLAB(1, &str_array, 0, NULL, "lasterr") ;
-    mxGetString(str_array, str, 1024) ;
-    mexErrMsgTxt(str) ;
-    /* mexErrMsgTxt("Error while executing SPARM.FINDMOSTVIOLATEDSLACKFN") ; */
+    /*    char str [1024] ;*/
+    mxArray * error_array ;
+    mexCallMATLAB(1, &error_array, 0, NULL, "lasterror") ;
+    /* both rethrow() and error() seem to work here */
+    mexCallMATLAB(0, NULL, 1, &error_array, "error") ;
   }
   if (mxGetClassID(ybar.mex) == mxUNKNOWN_CLASS) {
     mexErrMsgTxt("SPARM.FINDMOSTVIOLATESLACKFN did not reutrn a result") ;
