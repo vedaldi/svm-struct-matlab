@@ -1,0 +1,193 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXFileReference section */
+		2D002F7B104FCC3200981B2C /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		2D002F7D104FCC3200981B2C /* kernel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kernel.h; sourceTree = "<group>"; };
+		2D002F80104FCC3200981B2C /* svm_classify.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_classify.c; sourceTree = "<group>"; };
+		2D002F81104FCC3200981B2C /* svm_common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_common.c; sourceTree = "<group>"; };
+		2D002F82104FCC3200981B2C /* svm_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_common.h; sourceTree = "<group>"; };
+		2D002F84104FCC3200981B2C /* svm_hideo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_hideo.c; sourceTree = "<group>"; };
+		2D002F86104FCC3200981B2C /* svm_learn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_learn.c; sourceTree = "<group>"; };
+		2D002F87104FCC3200981B2C /* svm_learn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_learn.h; sourceTree = "<group>"; };
+		2D002F89104FCC3200981B2C /* svm_learn_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_learn_main.c; sourceTree = "<group>"; };
+		2D002F8A104FCC3200981B2C /* svm_loqo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_loqo.c; sourceTree = "<group>"; };
+		2D002F8D104FCC3200981B2C /* svm_struct_classify.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_classify.c; sourceTree = "<group>"; };
+		2D002F8E104FCC3200981B2C /* svm_struct_common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_common.c; sourceTree = "<group>"; };
+		2D002F8F104FCC3200981B2C /* svm_struct_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_common.h; sourceTree = "<group>"; };
+		2D002F91104FCC3200981B2C /* svm_struct_learn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn.c; sourceTree = "<group>"; };
+		2D002F92104FCC3200981B2C /* svm_struct_learn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_learn.h; sourceTree = "<group>"; };
+		2D002F94104FCC3200981B2C /* svm_struct_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_main.c; sourceTree = "<group>"; };
+		2D002F95104FCC3200981B2C /* svm_struct_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_api.c; sourceTree = "<group>"; };
+		2D002F96104FCC3200981B2C /* svm_struct_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_api.h; sourceTree = "<group>"; };
+		2D002F97104FCC3200981B2C /* svm_struct_api_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_api_types.h; sourceTree = "<group>"; };
+		2D002F98104FCC3200981B2C /* svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = svm_struct_learn.m; sourceTree = "<group>"; };
+		2D002F99104FCC3200981B2C /* svm_struct_learn_custom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn_custom.c; sourceTree = "<group>"; };
+		2D002F9A104FCC3200981B2C /* test_svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = test_svm_struct_learn.m; sourceTree = "<group>"; };
+		2D002F9B104FCC3200981B2C /* test_svm_struct_learn_ker.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = test_svm_struct_learn_ker.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2D002F66104FCBBE00981B2C = {
+			isa = PBXGroup;
+			children = (
+				2D002F7B104FCC3200981B2C /* Makefile */,
+				2D002F7C104FCC3200981B2C /* svm_light */,
+				2D002F8B104FCC3200981B2C /* svm_struct */,
+				2D002F95104FCC3200981B2C /* svm_struct_api.c */,
+				2D002F96104FCC3200981B2C /* svm_struct_api.h */,
+				2D002F97104FCC3200981B2C /* svm_struct_api_types.h */,
+				2D002F98104FCC3200981B2C /* svm_struct_learn.m */,
+				2D002F99104FCC3200981B2C /* svm_struct_learn_custom.c */,
+				2D002F9A104FCC3200981B2C /* test_svm_struct_learn.m */,
+				2D002F9B104FCC3200981B2C /* test_svm_struct_learn_ker.m */,
+			);
+			sourceTree = "<group>";
+		};
+		2D002F7C104FCC3200981B2C /* svm_light */ = {
+			isa = PBXGroup;
+			children = (
+				2D002F7D104FCC3200981B2C /* kernel.h */,
+				2D002F80104FCC3200981B2C /* svm_classify.c */,
+				2D002F81104FCC3200981B2C /* svm_common.c */,
+				2D002F82104FCC3200981B2C /* svm_common.h */,
+				2D002F84104FCC3200981B2C /* svm_hideo.c */,
+				2D002F86104FCC3200981B2C /* svm_learn.c */,
+				2D002F87104FCC3200981B2C /* svm_learn.h */,
+				2D002F89104FCC3200981B2C /* svm_learn_main.c */,
+				2D002F8A104FCC3200981B2C /* svm_loqo.c */,
+			);
+			path = svm_light;
+			sourceTree = "<group>";
+		};
+		2D002F8B104FCC3200981B2C /* svm_struct */ = {
+			isa = PBXGroup;
+			children = (
+				2D002F8D104FCC3200981B2C /* svm_struct_classify.c */,
+				2D002F8E104FCC3200981B2C /* svm_struct_common.c */,
+				2D002F8F104FCC3200981B2C /* svm_struct_common.h */,
+				2D002F91104FCC3200981B2C /* svm_struct_learn.c */,
+				2D002F92104FCC3200981B2C /* svm_struct_learn.h */,
+				2D002F94104FCC3200981B2C /* svm_struct_main.c */,
+			);
+			path = svm_struct;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		2D002F9C104FCC8300981B2C /* all */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 2D002FA7104FCCBB00981B2C /* Build configuration list for PBXLegacyTarget "all" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			name = all;
+			passBuildSettingsInEnvironment = 1;
+			productName = all;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		2D002F68104FCBBE00981B2C /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 2D002F6B104FCBBE00981B2C /* Build configuration list for PBXProject "svm-struct-matlab" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 0;
+			mainGroup = 2D002F66104FCBBE00981B2C;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2D002F9C104FCC8300981B2C /* all */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		2D002F69104FCBBE00981B2C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CFLAGS = "-gstabs+";
+				DOXYGEN = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(MATLABROOT)/extern/include";
+				MATLABEXE = "$(MATLABROOT)/bin/matlab";
+				MATLABROOT = /Applications/Matlab09A.app;
+				MEX = "$(MATLABROOT)/bin/mex";
+				PATH = "$(PATH):/opt/local/bin/";
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				VERB = yes;
+			};
+			name = Debug;
+		};
+		2D002F6A104FCBBE00981B2C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CFLAGS = "-gstabs+";
+				DOXYGEN = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(MATLABROOT)/extern/include";
+				MATLABEXE = "$(MATLABROOT)/bin/matlab";
+				MATLABROOT = /Applications/Matlab09A.app;
+				MEX = "$(MATLABROOT)/bin/mex";
+				NDEBUG = yes;
+				PATH = "$(PATH):/opt/local/bin/";
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				VERB = yes;
+			};
+			name = Release;
+		};
+		2D002F9D104FCC8300981B2C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		2D002F9E104FCC8300981B2C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = all;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D002F6B104FCBBE00981B2C /* Build configuration list for PBXProject "svm-struct-matlab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D002F69104FCBBE00981B2C /* Debug */,
+				2D002F6A104FCBBE00981B2C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D002FA7104FCCBB00981B2C /* Build configuration list for PBXLegacyTarget "all" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D002F9D104FCC8300981B2C /* Debug */,
+				2D002F9E104FCC8300981B2C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2D002F68104FCBBE00981B2C /* Project object */;
+}
