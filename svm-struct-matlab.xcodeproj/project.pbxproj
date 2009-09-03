@@ -8,28 +8,29 @@
 
 /* Begin PBXFileReference section */
 		2D002F7B104FCC3200981B2C /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		2D002F7D104FCC3200981B2C /* kernel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kernel.h; sourceTree = "<group>"; };
-		2D002F80104FCC3200981B2C /* svm_classify.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_classify.c; sourceTree = "<group>"; };
-		2D002F81104FCC3200981B2C /* svm_common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_common.c; sourceTree = "<group>"; };
-		2D002F82104FCC3200981B2C /* svm_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_common.h; sourceTree = "<group>"; };
-		2D002F84104FCC3200981B2C /* svm_hideo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_hideo.c; sourceTree = "<group>"; };
-		2D002F86104FCC3200981B2C /* svm_learn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_learn.c; sourceTree = "<group>"; };
-		2D002F87104FCC3200981B2C /* svm_learn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_learn.h; sourceTree = "<group>"; };
-		2D002F89104FCC3200981B2C /* svm_learn_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_learn_main.c; sourceTree = "<group>"; };
-		2D002F8A104FCC3200981B2C /* svm_loqo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_loqo.c; sourceTree = "<group>"; };
-		2D002F8D104FCC3200981B2C /* svm_struct_classify.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_classify.c; sourceTree = "<group>"; };
-		2D002F8E104FCC3200981B2C /* svm_struct_common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_common.c; sourceTree = "<group>"; };
-		2D002F8F104FCC3200981B2C /* svm_struct_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_common.h; sourceTree = "<group>"; };
-		2D002F91104FCC3200981B2C /* svm_struct_learn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn.c; sourceTree = "<group>"; };
-		2D002F92104FCC3200981B2C /* svm_struct_learn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_learn.h; sourceTree = "<group>"; };
-		2D002F94104FCC3200981B2C /* svm_struct_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_main.c; sourceTree = "<group>"; };
-		2D002F95104FCC3200981B2C /* svm_struct_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_api.c; sourceTree = "<group>"; };
-		2D002F96104FCC3200981B2C /* svm_struct_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_api.h; sourceTree = "<group>"; };
-		2D002F97104FCC3200981B2C /* svm_struct_api_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_api_types.h; sourceTree = "<group>"; };
-		2D002F98104FCC3200981B2C /* svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = svm_struct_learn.m; sourceTree = "<group>"; };
-		2D002F99104FCC3200981B2C /* svm_struct_learn_custom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn_custom.c; sourceTree = "<group>"; };
-		2D002F9A104FCC3200981B2C /* test_svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = test_svm_struct_learn.m; sourceTree = "<group>"; };
-		2D002F9B104FCC3200981B2C /* test_svm_struct_learn_ker.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = test_svm_struct_learn_ker.m; sourceTree = "<group>"; };
+		2D002F7D104FCC3200981B2C /* kernel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kernel.h; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F80104FCC3200981B2C /* svm_classify.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_classify.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
+		2D002F81104FCC3200981B2C /* svm_common.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_common.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
+		2D002F82104FCC3200981B2C /* svm_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_common.h; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F84104FCC3200981B2C /* svm_hideo.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_hideo.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
+		2D002F86104FCC3200981B2C /* svm_learn.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_learn.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
+		2D002F87104FCC3200981B2C /* svm_learn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_learn.h; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F89104FCC3200981B2C /* svm_learn_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_learn_main.c; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F8A104FCC3200981B2C /* svm_loqo.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_loqo.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
+		2D002F8D104FCC3200981B2C /* svm_struct_classify.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_classify.c; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F8E104FCC3200981B2C /* svm_struct_common.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_struct_common.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
+		2D002F8F104FCC3200981B2C /* svm_struct_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_common.h; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F91104FCC3200981B2C /* svm_struct_learn.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
+		2D002F92104FCC3200981B2C /* svm_struct_learn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_learn.h; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F94104FCC3200981B2C /* svm_struct_main.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_struct_main.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
+		2D002F95104FCC3200981B2C /* svm_struct_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_api.c; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F96104FCC3200981B2C /* svm_struct_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_api.h; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F97104FCC3200981B2C /* svm_struct_api_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_api_types.h; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F98104FCC3200981B2C /* svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = svm_struct_learn.m; sourceTree = "<group>"; tabWidth = 2; };
+		2D002F99104FCC3200981B2C /* svm_struct_learn_custom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn_custom.c; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F9A104FCC3200981B2C /* test_svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = test_svm_struct_learn.m; sourceTree = "<group>"; tabWidth = 2; };
+		2D002F9B104FCC3200981B2C /* test_svm_struct_learn_ker.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = test_svm_struct_learn_ker.m; sourceTree = "<group>"; tabWidth = 2; };
+		2D0030081050194100981B2C /* svm_struct_learn_mex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn_mex.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -42,8 +43,9 @@
 				2D002F95104FCC3200981B2C /* svm_struct_api.c */,
 				2D002F96104FCC3200981B2C /* svm_struct_api.h */,
 				2D002F97104FCC3200981B2C /* svm_struct_api_types.h */,
-				2D002F98104FCC3200981B2C /* svm_struct_learn.m */,
 				2D002F99104FCC3200981B2C /* svm_struct_learn_custom.c */,
+				2D0030081050194100981B2C /* svm_struct_learn_mex.c */,
+				2D002F98104FCC3200981B2C /* svm_struct_learn.m */,
 				2D002F9A104FCC3200981B2C /* test_svm_struct_learn.m */,
 				2D002F9B104FCC3200981B2C /* test_svm_struct_learn_ker.m */,
 			);
@@ -64,6 +66,7 @@
 			);
 			path = svm_light;
 			sourceTree = "<group>";
+			tabWidth = 8;
 		};
 		2D002F8B104FCC3200981B2C /* svm_struct */ = {
 			isa = PBXGroup;
@@ -77,6 +80,7 @@
 			);
 			path = svm_struct;
 			sourceTree = "<group>";
+			tabWidth = 8;
 		};
 /* End PBXGroup section */
 
