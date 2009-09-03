@@ -392,8 +392,14 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
 {
   SVECTOR *sv = NULL;
     
-  /* With linear kernels we call the explicit feature map PSI */
+  /* The algorith can use either a linear kernel (explicit feature map)
+   * or a custom kernel (implicit feature map). For the explicit feature 
+   * map, this function returns a  sizePhi-dimensional vector. For
+   * the implicit feature map this function returns a placeholder
+   * which simply remembers the pair (x,y). */
+  
   if (sm -> svm_model -> kernel_parm .kernel_type == LINEAR) {
+    /* For the linear kernel computes the vector Phi(x,y) */
     mxArray* out ;
     mxArray* fn_array ;
     mxArray* args [4] ;
@@ -451,7 +457,7 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
     mxDestroyArray (out) ;
   }
   else {
-    /* CUSTOM kernel */
+    /* For the ustom kernel returns a placeholder for (x,y). */
     MexPhiCustom phi = newMexPhiCustomFromPatternLabel(x.mex, y.mex) ;
     WORD * words = mxMalloc(sizeof(WORD)) ;
     words[0].wnum = 0 ;
