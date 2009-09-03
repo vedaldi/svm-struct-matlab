@@ -87,7 +87,7 @@ init_struct_model (SAMPLE sample, STRUCTMODEL *sm,
         ! uIsRealScalar(sizePsi_array)) {
       mexErrMsgTxt("SPARM.SIZEPSI must be a scalar") ;
     }
-    
+
     sm->sizePsi = *mxGetPr(sizePsi_array) ;
     if (sm->sizePsi < 1) {
       mexErrMsgTxt("SPARM.SIZEPSI must be not smaller than 1") ;
@@ -245,7 +245,7 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
     mexErrMsgTxt("SPARM.FINDMOSTVIOLATEDSLACKFN must be a valid function handle") ;
   }
 
-  /* encapsulate sm->w into a Matlab array */  
+  /* encapsulate sm->w into a Matlab array */
   model_array = newMxArrayEncapsulatingSmodel (sm) ;
 
   args[0] = fn_array ;
@@ -253,13 +253,13 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
   args[2] = model_array ;
   args[3] = x.mex ;
   args[4] = y.mex ;
-  
+
   /* Apparently we must make sure that model_array is not destoryed by
      the automatic cleaning up function. It seems that, because it is constructed by
      encapsulating input argument to the MEX file, it must be considered an hybrid
      array, i.e. an array which cannot be destroyed by MATLAB automatic
      cleanup system, invoked when an error is raised */
-  
+
   mexSetTrapFlag (1) ;
   status = mexCallMATLAB(1, &ybar.mex, 5, args, "feval") ;
   mexSetTrapFlag (0) ;
@@ -267,10 +267,8 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
   destroyMxArrayEncapsulatingSmodel (model_array) ;
 
   if (status) {
-    /*    char str [1024] ;*/
     mxArray * error_array ;
     mexCallMATLAB(1, &error_array, 0, NULL, "lasterror") ;
-    /* both rethrow() and error() seem to work here */
     mexCallMATLAB(0, NULL, 1, &error_array, "error") ;
   }
   if (mxGetClassID(ybar.mex) == mxUNKNOWN_CLASS) {
@@ -312,7 +310,7 @@ find_most_violated_constraint_marginrescaling (PATTERN x, LABEL y,
 {
   LABEL ybar ;
   mxArray* fn_array ;
-  mxArray* w_array ;
+  mxArray* model_array ;
   mxArray* args [5] ;
   int status ;
 
@@ -322,21 +320,25 @@ find_most_violated_constraint_marginrescaling (PATTERN x, LABEL y,
     mexErrMsgTxt("SPARM.FINDMOSTVIOLATEDMARGINFN must be a valid function handle") ;
   }
 
-  w_array = mxCreateDoubleMatrix(sm->sizePsi, 1, mxREAL) ;
-  memcpy(mxGetPr(w_array),  sm->w + 1, sm->sizePsi * sizeof(double)) ;
+  /* encapsulate sm->w into a Matlab array */
+  model_array = newMxArrayEncapsulatingSmodel (sm) ;
 
   args[0] = fn_array ;
   args[1] = (mxArray*) sparm->mex ; /* model (discard conts) */
-  args[2] = w_array ;
+  args[2] = model_array ;
   args[3] = x.mex ;
   args[4] = y.mex ;
 
+  mexSetTrapFlag (1) ;
   status = mexCallMATLAB(1, &ybar.mex, 5, args, "feval") ;
+  mexSetTrapFlag (0) ;
 
-  mxDestroyArray(w_array) ;
+  destroyMxArrayEncapsulatingSmodel (model_array) ;
 
   if (status) {
-    mexErrMsgTxt("Error while executing SPARM.FINDMOSTVIOLATEDMARGINFN") ;
+    mxArray * error_array ;
+    mexCallMATLAB(1, &error_array, 0, NULL, "lasterror") ;
+    mexCallMATLAB(0, NULL, 1, &error_array, "error") ;
   }
   if (mxGetClassID(ybar.mex) == mxUNKNOWN_CLASS) {
     mexErrMsgTxt("SPARM.FINDMOSTVIOLATEDMARGINFN did not reutrn a result") ;
@@ -391,13 +393,13 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
       STRUCT_LEARN_PARM *sparm)
 {
   SVECTOR *sv = NULL;
-    
+
   /* The algorith can use either a linear kernel (explicit feature map)
    * or a custom kernel (implicit feature map). For the explicit feature 
    * map, this function returns a  sizePhi-dimensional vector. For
    * the implicit feature map this function returns a placeholder
-   * which simply remembers the pair (x,y). */
-  
+   */
+
   if (sm -> svm_model -> kernel_parm .kernel_type == LINEAR) {
     /* For the linear kernel computes the vector Phi(x,y) */
     mxArray* out ;
@@ -406,26 +408,26 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
     WORD* words = NULL ;
     double twonorm_sq = 0 ;
     int status ;
-    
+
     fn_array = mxGetField(sparm->mex, 0, "psiFn") ;
     if (! fn_array ||
         ! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
       mexErrMsgTxt("SPARM.PSIFN must be a valid function handle") ;
     }
-    
+
     args[0] = fn_array ;
     args[1] = (mxArray*) sparm->mex ; /* model (discard conts) */
     args[2] = x.mex ;                 /* pattern */
     args[3] = y.mex ;                 /* label */
     status = mexCallMATLAB(1, &out, 4, args, "feval") ;
-    
+
     if (status) {
       mexErrMsgTxt("Error while executing SPARM.PSIFN") ;
     }
     if (mxGetClassID(out) == mxUNKNOWN_CLASS) {
       mexErrMsgTxt("SPARM.PSIFN must reutrn a result") ;
     }
-    
+
     if (! mxIsSparse(out) ||
         ! mxGetClassID(out) == mxDOUBLE_CLASS ||
         ! mxGetN(out) == 1 ||
@@ -433,13 +435,13 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
       mexErrMsgTxt("SPARM.PSIFN must return a sparse column vector "
                    "of the prescribed size") ;
     }
-    
+
     {
       double * data = mxGetPr(out) ;
       mwIndex * colOffsets = mxGetJc(out) ;
       mwIndex * rowIndexes = mxGetIr(out) ;
       int numNZ = colOffsets[1] - colOffsets[0] ;
-      
+
       words = (WORD*) my_malloc (sizeof(WORD) * (numNZ + 1)) ;
       int i ;
       for (i = 0 ; i < numNZ ; ++ i) {
@@ -450,10 +452,10 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
       words[numNZ].wnum = 0 ;
       words[numNZ].weight = 0 ;
     }
-        
+
     sv = create_svector_shallow (words, NULL, 1.0) ;
     sv->twonorm_sq = twonorm_sq ;
-    
+
     mxDestroyArray (out) ;
   }
   else {
@@ -492,9 +494,9 @@ loss (LABEL y, LABEL ybar, STRUCT_LEARN_PARM *sparm)
   args[1] = (mxArray*) sparm->mex ; /* model (discard conts) */
   args[2] = y.mex ;
   args[3] = ybar.mex ;
-  
+
   status = mexCallMATLAB (1, &out, 4, args, "feval") ;
-  
+
   if (status) {
     mexErrMsgTxt("Error while executing SPARM.LOSSFN") ;
   }
