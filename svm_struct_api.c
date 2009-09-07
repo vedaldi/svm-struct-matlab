@@ -269,7 +269,8 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
   if (status) {
     mxArray * error_array ;
     mexCallMATLAB(1, &error_array, 0, NULL, "lasterror") ;
-    mexCallMATLAB(0, NULL, 1, &error_array, "error") ;
+    mexCallMATLAB(0, NULL, 1, &error_array, "disp") ;
+    mexCallMATLAB(0, NULL, 1, &error_array, "rethrow") ;
   }
   if (mxGetClassID(ybar.mex) == mxUNKNOWN_CLASS) {
     mexErrMsgTxt("SPARM.FINDMOSTVIOLATESLACKFN did not reutrn a result") ;
