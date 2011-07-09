@@ -13,6 +13,10 @@ the command line path. So just issue
 
 > make
 
+The only files that are needed to run the package with MATLAB are
+svm_struct_learn.mex* (MEX program) and svm_struct_learn.m
+(documentation).
+
 If MEX is not on the command line, the path can be specified as
 
 > make MEX=<MATLABROOT>/bin/mex
