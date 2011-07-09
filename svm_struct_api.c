@@ -82,15 +82,17 @@ init_struct_model (SAMPLE sample, STRUCTMODEL *sm,
                    KERNEL_PARM *kparm)
 {
   if (kparm->kernel_type == LINEAR) {
-    mxArray const * sizePsi_array = mxGetField(sparm->mex, 0, "sizePsi") ;
-    if (! sizePsi_array ||
-        ! uIsRealScalar(sizePsi_array)) {
-      mexErrMsgTxt("SPARM.SIZEPSI must be a scalar") ;
+    mxArray const * sizePsi_array = mxGetField(sparm->mex, 0, "dimension") ;
+    if (! sizePsi_array) {
+        mexErrMsgTxt("Field PARM.DIMENSION not found") ;
+    }
+    if (! uIsRealScalar(sizePsi_array)) {
+      mexErrMsgTxt("PARM.DIMENSION must be a scalar") ;
     }
 
     sm->sizePsi = *mxGetPr(sizePsi_array) ;
     if (sm->sizePsi < 1) {
-      mexErrMsgTxt("SPARM.SIZEPSI must be not smaller than 1") ;
+      mexErrMsgTxt("PARM.DIMENSION must be not smaller than 1") ;
     }
   } else {
     sm -> sizePsi = 0 ;
@@ -167,10 +169,12 @@ classify_struct_example (PATTERN x,
   mxArray* args [4] ;
   int status ;
 
-  fn_array= mxGetField(sparm->mex, 0, "classifyStructExampleFn") ;
-  if (! fn_array ||
-      ! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
-    mexErrMsgTxt("SPARM.CLASSIFYSTRUCTEXAMPLEFN must be a valid function handle") ;
+  fn_array= mxGetField(sparm->mex, 0, "classifyFn") ;
+  if (! fn_array) {
+      mexErrMsgTxt("Field PARM.CLASSIFYFN not found") ;
+  }
+  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+    mexErrMsgTxt("PARM.CLASSIFYFN must be a valid function handle") ;
   }
 
   /* encapsulate sm->w into a Matlab array */
@@ -190,10 +194,10 @@ classify_struct_example (PATTERN x,
   mxDestroyArray(w_array) ;
 
   if (status) {
-    mexErrMsgTxt("Error while executing SPARM.CLASSIFYSTRUCTEXAMPLEFN") ;
+    mexErrMsgTxt("Error while executing PARM.CLASSIFYFN") ;
   }
   if (mxGetClassID(y.mex) == mxUNKNOWN_CLASS) {
-    mexErrMsgTxt("SPARM.CLASSIFYSTRUCTEXAMPLEFN did not reutrn a result") ;
+    mexErrMsgTxt("PARM.CLASSIFYFN did not reutrn a result") ;
   }
 
   /* flag this label has one tha should be freed when discared */
@@ -239,10 +243,12 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
   mxArray* args [5] ;
   int status ;
 
-  fn_array = mxGetField(sparm->mex, 0, "findMostViolatedSlackFn") ;
-  if (! fn_array ||
-      ! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
-    mexErrMsgTxt("SPARM.FINDMOSTVIOLATEDSLACKFN must be a valid function handle") ;
+  fn_array = mxGetField(sparm->mex, 0, "constraintFn") ;
+  if (! fn_array) {
+    mexErrMsgTxt("Field PARM.CONSTRAINTFN not found") ;
+  }
+  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+    mexErrMsgTxt("PARM.CONSTRAINTFN must be a valid function handle") ;
   }
 
   /* encapsulate sm->w into a Matlab array */
@@ -273,7 +279,7 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
     mexCallMATLAB(0, NULL, 1, &error_array, "rethrow") ;
   }
   if (mxGetClassID(ybar.mex) == mxUNKNOWN_CLASS) {
-    mexErrMsgTxt("SPARM.FINDMOSTVIOLATESLACKFN did not reutrn a result") ;
+    mexErrMsgTxt("PARM.CONSTRAINTFN did not reutrn a result") ;
   }
   ybar.isOwner = 1 ;
 
@@ -315,10 +321,12 @@ find_most_violated_constraint_marginrescaling (PATTERN x, LABEL y,
   mxArray* args [5] ;
   int status ;
 
-  fn_array = mxGetField(sparm->mex, 0, "findMostViolatedMarginFn") ;
-  if (! fn_array ||
-      ! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
-    mexErrMsgTxt("SPARM.FINDMOSTVIOLATEDMARGINFN must be a valid function handle") ;
+  fn_array = mxGetField(sparm->mex, 0, "constraintFn") ;
+  if (! fn_array) {
+    mexErrMsgTxt("Field PARM.CONSTRAINTFN not found") ;
+  }
+  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+    mexErrMsgTxt("PARM.CONSTRAINTFN is not a valid function handle") ;
   }
 
   /* encapsulate sm->w into a Matlab array */
@@ -342,7 +350,7 @@ find_most_violated_constraint_marginrescaling (PATTERN x, LABEL y,
     mexCallMATLAB(0, NULL, 1, &error_array, "error") ;
   }
   if (mxGetClassID(ybar.mex) == mxUNKNOWN_CLASS) {
-    mexErrMsgTxt("SPARM.FINDMOSTVIOLATEDMARGINFN did not reutrn a result") ;
+    mexErrMsgTxt("PARM.CONSTRAINTFN did not reutrn a result") ;
   }
   ybar.isOwner = 1 ;
 
@@ -396,7 +404,7 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
   SVECTOR *sv = NULL;
 
   /* The algorith can use either a linear kernel (explicit feature map)
-   * or a custom kernel (implicit feature map). For the explicit feature 
+   * or a custom kernel (implicit feature map). For the explicit feature
    * map, this function returns a  sizePhi-dimensional vector. For
    * the implicit feature map this function returns a placeholder
    */
@@ -410,10 +418,12 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
     double twonorm_sq = 0 ;
     int status ;
 
-    fn_array = mxGetField(sparm->mex, 0, "psiFn") ;
-    if (! fn_array ||
-        ! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
-      mexErrMsgTxt("SPARM.PSIFN must be a valid function handle") ;
+    fn_array = mxGetField(sparm->mex, 0, "featureFn") ;
+    if (! fn_array) {
+      mexErrMsgTxt("Field PARM.FEATUREFN not found") ;
+    }
+    if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+      mexErrMsgTxt("PARM.FEATUREFN must be a valid function handle") ;
     }
 
     args[0] = fn_array ;
@@ -423,17 +433,17 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
     status = mexCallMATLAB(1, &out, 4, args, "feval") ;
 
     if (status) {
-      mexErrMsgTxt("Error while executing SPARM.PSIFN") ;
+      mexErrMsgTxt("Error while executing PARM.FEATUREFN") ;
     }
     if (mxGetClassID(out) == mxUNKNOWN_CLASS) {
-      mexErrMsgTxt("SPARM.PSIFN must reutrn a result") ;
+      mexErrMsgTxt("PARM.FEATUREFN must reutrn a result") ;
     }
 
     if (! mxIsSparse(out) ||
         ! mxGetClassID(out) == mxDOUBLE_CLASS ||
         ! mxGetN(out) == 1 ||
         ! mxGetM(out) == sm->sizePsi) {
-      mexErrMsgTxt("SPARM.PSIFN must return a sparse column vector "
+      mexErrMsgTxt("PARM.FEATUREFN must return a sparse column vector "
                    "of the prescribed size") ;
     }
 
@@ -486,9 +496,11 @@ loss (LABEL y, LABEL ybar, STRUCT_LEARN_PARM *sparm)
   int status ;
 
   fn_array = mxGetField(sparm->mex, 0, "lossFn") ;
-  if (! fn_array ||
-      ! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
-    mexErrMsgTxt("SPARM.LOSSFN must be a valid function handle") ;
+  if (! fn_array) {
+    mexErrMsgTxt("Field PARM.LOSSFN not found") ;
+  }
+  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+    mexErrMsgTxt("PARM.LOSSFN must be a valid function handle") ;
   }
 
   args[0] = fn_array ;
@@ -499,10 +511,10 @@ loss (LABEL y, LABEL ybar, STRUCT_LEARN_PARM *sparm)
   status = mexCallMATLAB (1, &out, 4, args, "feval") ;
 
   if (status) {
-    mexErrMsgTxt("Error while executing SPARM.LOSSFN") ;
+    mexErrMsgTxt("Error while executing PARM.LOSSFN") ;
   }
   if (! uIsRealScalar(out)) {
-    mexErrMsgTxt("SPARM.LOSSFN must reutrn a scalar") ;
+    mexErrMsgTxt("PARM.LOSSFN must reutrn a scalar") ;
   }
 
   loss_value = *mxGetPr(out) ;

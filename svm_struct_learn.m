@@ -1,11 +1,59 @@
-% SVM_STRUCT_LEARN
-%   W = SVM_STRUCT_LEARN(ARGS, SPARM)
+% SVM_STRUCT_LEARN  Calls the SVM-struct solver
+%   MODEL = SVM_STRUCT_LEARN(ARGS, PARM) runs SVM-struct solver with
+%   parameters ARGS on the problem PARM. See [1-6] for the
+%   theory. SPARM is a structure of with the fields
+%
+%     PATTERNS:: patterns (X)
+%       A cell array of patterns. The entries can have any nature
+%       (they can just be indexes of the actual data for example).
+%
+%     LABELS:: labels (Y)
+%       A cell array of labels. The entries can have any nature.
+%
+%     LOSSFN:: loss function callback
+%       A handle to the loss function. This function has the form
+%       L = LOSS(PARAM, Y, YBAR) where PARAM is the SPARM structure,
+%       Y a ground truth label, YBAR another label, and L a
+%       non-negative scalar.
+%
+%     CONSTRAINTFN:: constraint callback
+%       A handle to the constraint generation function. This function
+%       has the form YBAR = FUNC(PARAM, MODEL, X, Y) where PARAM is
+%       the input PARM structure, MODEL is the a structure
+%       representing the current model, X is an input pattern, and Y
+%       is its ground truth label. YBAR is the most violated labels.
+%
+%     FEATUREN:: feature map callback
+%       A handle to the feature map. This function has the form PSI =
+%       FEATURE(PARAM, X, Y) where PARAM is the input PARM structure,
+%       X is a pattern, Y is a label, and PSI a sparse vector of
+%       dimension PARM.DIMENSION. This handle does not need to be
+%       specified if kernels are used.
+%
+%     DIMENSION:: dimension of the feature map
+%       The dimension of the feature map. This value does not need to
+%       be specified i kernels are used.
+%
+%     KERNELFN:: kernel function callback
+%       A handle to the kernel function. This function has the form K
+%       = KERN(PARAM, X, Y, XP, YP) where PARAM is the input PARM
+%       structure, and X, Y and XP, YP are two pattern-label pairs,
+%       input of the joint kernel. This handle does not need to be
+%       specified if feature maps are used.
+%
+%   MODEL is a structure with fields:
+%
+%     W:: weight vector
+%       This is a spare vector of size PARAM.DIMENSION. It is used
+%       with feature maps.
+%
+%     ALPHA:: dual variables
+%     SVPATTERNS:: patterns which are support vectors
+%     SVLABELS:: labels which are support vectors
+%       Used with kernels.
 %
 %   ARGS is a string specifying options in the usual struct
 %   SVM. These are:
-%
-%           example_file-> file with training data
-%           model_file  -> file to store learned decision rule in
 %
 %   General Options::
 %           -v [0..3]   -> verbosity level (default 1)
@@ -19,14 +67,12 @@
 %           -o [1,2]    -> Rescaling method to use for loss.
 %                          1: slack rescaling
 %                          2: margin rescaling
-%                          (default %d)",DEFAULT_RESCALING);
 %           -l [0..]    -> Loss function to use.
 %                          0: zero/one loss
 %                          ?: see below in application specific options
-%                          (default %d)",DEFAULT_LOSS_FCT);
 %
 %   Optimization Options (see [2][5])::
-%           -w [0,..,9] -> choice of structural learning algorithm (default %d):",(int)DEFAULT_ALG_TYPE);
+%           -w [0,..,9] -> choice of structural learning algorithm
 %                          0: n-slack algorithm described in [2]
 %                          1: n-slack algorithm with shrinking heuristic
 %                          2: 1-slack algorithm (primal) described in [5]
@@ -34,7 +80,7 @@
 %                          4: 1-slack algorithm (dual) with constraint cache [5]
 %                          9: custom algorithm in svm_struct_learn_custom.c
 %           -e float    -> epsilon: allow that tolerance for termination
-%                          criterion (default %f)",DEFAULT_EPS);
+%                          criterion
 %           -k [1..]    -> number of new constraints to accumulate before
 %                          recomputing the QP solution (default 100) (-w 0 and 1 only)
 %           -f [5..]    -> number of constraints to cache for each example
@@ -72,7 +118,7 @@
 %           -a string   -> write all alphas to this file after learning
 %                          (in the same order as in the training set)
 %  References::
-%    [1] T. Joachims, Learning to Align Sequences: A Maximum Margin Aproach.
+%    [1] T. Joachims, Learning to Align Sequences: A Maximum Margin Approach.
 %        Technical Report, September, 2003.
 %    [2] I. Tsochantaridis, T. Joachims, T. Hofmann, and Y. Altun, Large Margin
 %        Methods for Structured and Interdependent Output Variables, Journal
@@ -85,5 +131,6 @@
 %        2002.
 %    [5] T. Joachims, T. Finley, Chun-Nam Yu, Cutting-Plane Training of Structural
 %        SVMs, Machine Learning Journal, to appear.
-%
-%  Authors:: Andrea Vedaldi (MEX version)
+%    [6] http://svmlight.joachims.org/
+
+%  Authors:: Andrea Vedaldi (MATLAB MEX version)

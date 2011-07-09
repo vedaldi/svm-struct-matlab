@@ -1,15 +1,17 @@
 function test_svm_struct_learn_ker
 % TEST_SVM_STRUCT_LEARN
-%   Test function for SVM_STRUCT_LEARN().
+%   Test function for SVM_STRUCT_LEARN(). It shows how to use
+%   SVM-struct to learn a standard linear SVM while using the generic
+%   kernel interface.
 
   randn('state',0) ;
   rand('state',0) ;
-  
+
   % ------------------------------------------------------------------
   %                                                      Generate data
   % ------------------------------------------------------------------
-  
-  th = pi/3 ; %rand * 2*pi ;
+
+  th = pi/3 ;
   c = cos(th) ;
   s = sin(th) ;
 
@@ -26,15 +28,14 @@ function test_svm_struct_learn_ker
   %                                                    Run SVM struct
   % ------------------------------------------------------------------
 
-  sparm.patterns                 = patterns ;
-  sparm.labels                   = labels ;
-  sparm.lossFn                   = @lossCB
-  sparm.findMostViolatedSlackFn  = @constraintCB ;
-  sparm.kernelFn                 = @kernelCB ;
-
-
-  model = svm_struct_learn(' -c 1.0 -o 1 -v 1 -t 4 ', sparm) ;  
-  w = cat(2, model.svPatterns{:}) * (model.alpha .* cat(1, model.svLabels{:})) ; 
+  parm.patterns = patterns ;
+  parm.labels = labels ;
+  parm.lossFn = @lossCB
+  parm.constraintFn  =@constraintCB ;
+  parm.kernelFn = @kernelCB ;
+  parm.verbose = 1 ;
+  model = svm_struct_learn(' -c 1.0 -o 1 -v 1 -t 4 ', parm) ;
+  w = cat(2, model.svPatterns{:}) * (model.alpha .* cat(1, model.svLabels{:})) ;
 
   % ------------------------------------------------------------------
   %                                                              Plots
@@ -52,56 +53,37 @@ function test_svm_struct_learn_ker
       'color', 'y', 'linewidth', 2, 'linestyle', '-') ;
   axis equal ;
   set(gca, 'color', 'b') ;
+end
 
-  % ------------------------------------------------------------------
-  %                                               SVM struct callbacks
-  % ------------------------------------------------------------------
+% --------------------------------------------------------------------
+%                                                SVM struct callbacks
+% --------------------------------------------------------------------
 
-  function delta = lossCB(param, y, ybar)
-  % loss function delta(y, ybar)
-    delta = double(y ~= ybar) ;
+function delta = lossCB(param, y, ybar)
+% loss function delta(y, ybar)
+  delta = double(y ~= ybar) ;
+  if param.verbose
     fprintf('delta = loss(%3d, %3d) = %f\n', y, ybar, delta) ;
   end
+end
 
-  function ybar = constraintCB(param, model, x, y)
-  % find slack-rescaling largest violation
-  % argmax_y delta(yi, y) (1 + < psi(x,y), w > - < psi(x,yi), w >)
+function k = kernelCB(param, x,y, xp, yp)
+  k = x' * xp * y * yp ;
+end
 
-    if size(model.svPatterns, 2) == 0
-      w = zeros(size(x)) ;
-    else
-      w = cat(2, model.svPatterns{:}) * (model.alpha .* cat(1, model.svLabels{:})) ; 
-    end
+function ybar = constraintCB(param, model, x, y)
+% slack resaling: argmax_y delta(yi, y) (1 + <psi(x,y), w> - <psi(x,yi), w>)
+% margin rescaling: argmax_y delta(yi, y) + <psi(x,y), w>
 
-    % return -y iif
-    %  0 = delta(y, y) (1 +  <y*x,w> - <y*x,w>) 
-    %    < delta(y,-y) (1 + <-y*x,w> - <y*x,w>) = 1 - 2 <y*x,w>
-    if dot(y*x, w) > .5
-      ybar = y ;
-    else
-      ybar = - y ;
-    end
+  % the kernel is linear, get a weight vector back
+  if size(model.svPatterns, 2) == 0
+    w = zeros(size(x)) ;
+  else
+    w = cat(2, model.svPatterns{:}) * (model.alpha .* cat(1, model.svLabels{:})) ;
+  end
+  if dot(y*x, w) > .5, ybar = y ; else ybar = -y ; end
+  if param.verbose
     fprintf('ybar = violslack([%8.3f,%8.3f], [%8.3f,%8.3f], %3d) = %3d\n', ...
             w, x, y, ybar) ;
   end
-
-  function ybar = violMargin(param, model, w, x, y)
-  % find margin-rescaling largest violation
-  % argmax_y delta(yi, y) + < psi(x,y), w >
-
-    % return y iif
-    %  delta(y,y) + <y*x,w>  > delta(y,-y) + <-y*x,w>
-    if dot(y*x, w) > .5
-      ybar = y ;
-    else
-      ybar = - y ;
-    end
-    fprintf('ybar = violmargin([%8.3f,%8.3f], [%8.3f,%8.3f], %3d) = %3d\n', ...
-            w, x, y, ybar) ;
-  end
-
-  function k = kernelCB(param, x,y, xp, yp)
-    k = x' * xp * y * yp ;
-  end
-
 end

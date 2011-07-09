@@ -1,6 +1,7 @@
 function test_svm_struct_learn
-% TEST_SVM_STRUCT_LEARN
-%   Test function for SVM_STRUCT_LEARN().
+% TEST_SVM_STRUCT_LEARN=
+%   Test function for SVM_STRUCT_LEARN(). It shows how to use
+%   SVM-struct to learn a standard linear SVM.
 
   randn('state',0) ;
   rand('state',0) ;
@@ -9,7 +10,7 @@ function test_svm_struct_learn
   %                                                      Generate data
   % ------------------------------------------------------------------
 
-  th = pi/3 ; %rand * 2*pi ;
+  th = pi/3 ;
   c = cos(th) ;
   s = sin(th) ;
 
@@ -26,14 +27,14 @@ function test_svm_struct_learn
   %                                                    Run SVM struct
   % ------------------------------------------------------------------
 
-  sparm.patterns                 = patterns ;
-  sparm.labels                   = labels ;
-  sparm.lossFn                   = @lossCB ;
-  sparm.findMostViolatedSlackFn  = @constraintCB ;
-  sparm.psiFn                    = @featureCB ;
-  sparm.sizePsi                  = 2 ;
-
-  model = svm_struct_learn(' -c 1.0 -o 1 -v 1 ', sparm) ;
+  parm.patterns = patterns ;
+  parm.labels = labels ;
+  parm.lossFn = @lossCB ;
+  parm.constraintFn  = @constraintCB ;
+  parm.featureFn = @featureCB ;
+  parm.dimension = 2 ;
+  parm.verbose = 1 ;
+  model = svm_struct_learn(' -c 1.0 -o 1 -v 1 ', parm) ;
   w = model.w ;
 
   % ------------------------------------------------------------------
@@ -52,62 +53,47 @@ function test_svm_struct_learn
       'color', 'y', 'linewidth', 2, 'linestyle', '-') ;
   axis equal ;
   set(gca, 'color', 'b') ;
+end
 
-  % ------------------------------------------------------------------
-  %                                               SVM struct callbacks
-  % ------------------------------------------------------------------
+% ------------------------------------------------------------------
+%                                               SVM struct callbacks
+% ------------------------------------------------------------------
 
-  function delta = lossCB(param, y, ybar)
-  % loss function delta(y, ybar)
-    delta = double(y ~= ybar) ;
+function delta = lossCB(param, y, ybar)
+  delta = double(y ~= ybar) ;
+  if param.verbose
     fprintf('delta = loss(%3d, %3d) = %f\n', y, ybar, delta) ;
   end
+end
 
-  function w = featureCB(param, x, y)
-  % feature map psi(x, y)
-    w = sparse(y*x) ;
-    %    fprintf('w = psi([%8.3f,%8.3f], %3d) = [%8.3f, %8.3f]\n', ...
-    %        x, y, w(1), w(2)) ;
+function w = featureCB(param, x, y)
+  w = sparse(y*x) ;
+  if param.verbose
+    fprintf('w = psi([%8.3f,%8.3f], %3d) = [%8.3f, %8.3f]\n', ...
+            x, y, full(w(1)), full(w(2))) ;
   end
+end
 
-  function y = classifyCB(param, model, x)
-  % inference argmax_y < psi(x,y), w >
-    w = model.w ;
-    y = sign(dot(w,x)) ;
-    fprintf('y = classify([%f,%f], [%f,$f]) = %f\n', ...
-            w,x,y) ;
+function ybar = constraintCB(param, model, x, y)
+% slack resaling: argmax_y delta(yi, y) (1 + <psi(x,y), w> - <psi(x,yi), w>)
+% margin rescaling: argmax_y delta(yi, y) + <psi(x,y), w>
+  w = model.w ;
+  if dot(y*x, w) > .5
+    ybar = y ;
+  else
+    ybar = - y ;
   end
-
-  function ybar = constraintCB(param, model, x, y)
-  % find slack-rescaling largest violation
-  % argmax_y delta(yi, y) (1 + < psi(x,y), w > - < psi(x,yi), w >)
-    
-    w = model.w ;
-    
-    % return y iif
-    %  delta(y,y) (1 + <y*x,w> - <-y*w>) > delta(y,-y) (1 + <-y*x,w> - <y*w>)
-    if dot(y*x, w) > .5
-      ybar = y ;
-    else
-      ybar = - y ;
-    end
+  if param.verbose
     fprintf('ybar = violslack([%8.3f,%8.3f], [%8.3f,%8.3f], %3d) = %3d\n', ...
             w, x, y, ybar) ;
   end
+end
 
-  function ybar = violMargin(m, w, x, y)
-  % find margin-rescaling largest violation
-  % argmax_y delta(yi, y) + < psi(x,y), w >
-
-    % return y iif
-    %  delta(y,y) + <y*x,w>  > delta(y,-y) + <-y*x,w>
-    if dot(y*x, w) > .5
-      ybar = y ;
-    else
-      ybar = - y ;
-    end
-    %    fprintf('ybar = violmargin([%8.3f,%8.3f], [%8.3f,%8.3f], %3d) = %3d\n', ...
-    %        w, x, y, ybar) ;
+function y = classifyCB(param, model, x)
+  w = model.w ;
+  y = sign(dot(w,x)) ;
+  if param.verbose
+    fprintf('y = classify([%f,%f], [%f,$f]) = %f\n', ...
+            w,x,y) ;
   end
-
 end
