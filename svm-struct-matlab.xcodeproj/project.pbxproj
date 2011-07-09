@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		2D002F7B104FCC3200981B2C /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		2D002F7B104FCC3200981B2C /* Makefile */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; path = Makefile; sourceTree = "<group>"; wrapsLines = 0; };
 		2D002F7D104FCC3200981B2C /* kernel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kernel.h; sourceTree = "<group>"; tabWidth = 8; };
 		2D002F80104FCC3200981B2C /* svm_classify.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_classify.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
 		2D002F81104FCC3200981B2C /* svm_common.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_common.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
@@ -105,7 +105,11 @@
 			isa = PBXProject;
 			buildConfigurationList = 2D002F6B104FCBBE00981B2C /* Build configuration list for PBXProject "svm-struct-matlab" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 2D002F66104FCBBE00981B2C;
 			projectDirPath = "";
 			projectRoot = "";
@@ -119,37 +123,41 @@
 		2D002F69104FCBBE00981B2C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CFLAGS = "-gstabs+";
-				DOXYGEN = /Applications/Doxygen.app/Contents/Resources/doxygen;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				ARCH = "$(ARCH_$(ARCHS))";
+				ARCHS = (
+					i386,
+					x86_64,
+				);
+				ARCH_i386 = maci;
+				ARCH_x86_64 = maci64;
+				DOXYGEN = doxygen;
 				HEADER_SEARCH_PATHS = "$(MATLABROOT)/extern/include";
-				MATLABEXE = "$(MATLABROOT)/bin/matlab";
-				MATLABROOT = /Applications/Matlab09A.app;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MATLABROOT = /Applications/Matlab09B.app;
 				MEX = "$(MATLABROOT)/bin/mex";
-				PATH = "$(PATH):/opt/local/bin/";
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				VERB = yes;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Debug;
 		};
 		2D002F6A104FCBBE00981B2C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CFLAGS = "-gstabs+";
-				DOXYGEN = /Applications/Doxygen.app/Contents/Resources/doxygen;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				ARCH = "$(ARCH_$(ARCHS))";
+				ARCHS = (
+					i386,
+					x86_64,
+				);
+				ARCH_i386 = maci;
+				ARCH_x86_64 = maci64;
+				DOXYGEN = doxygen;
 				HEADER_SEARCH_PATHS = "$(MATLABROOT)/extern/include";
-				MATLABEXE = "$(MATLABROOT)/bin/matlab";
-				MATLABROOT = /Applications/Matlab09A.app;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MATLABROOT = /Applications/Matlab09B.app;
 				MEX = "$(MATLABROOT)/bin/mex";
 				NDEBUG = yes;
-				PATH = "$(PATH):/opt/local/bin/";
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				VERB = yes;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Release;
 		};
@@ -162,11 +170,7 @@
 		2D002F9E104FCC8300981B2C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PRODUCT_NAME = all;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
