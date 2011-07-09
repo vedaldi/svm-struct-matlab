@@ -23,20 +23,22 @@
 		2D002F91104FCC3200981B2C /* svm_struct_learn.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
 		2D002F92104FCC3200981B2C /* svm_struct_learn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_learn.h; sourceTree = "<group>"; tabWidth = 8; };
 		2D002F94104FCC3200981B2C /* svm_struct_main.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = svm_struct_main.c; sourceTree = "<group>"; tabWidth = 8; usesTabs = 0; };
-		2D002F95104FCC3200981B2C /* svm_struct_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_api.c; sourceTree = "<group>"; tabWidth = 8; };
+		2D002F95104FCC3200981B2C /* svm_struct_api.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = svm_struct_api.c; sourceTree = "<group>"; tabWidth = 8; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		2D002F96104FCC3200981B2C /* svm_struct_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_api.h; sourceTree = "<group>"; tabWidth = 8; };
 		2D002F97104FCC3200981B2C /* svm_struct_api_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svm_struct_api_types.h; sourceTree = "<group>"; tabWidth = 8; };
-		2D002F98104FCC3200981B2C /* svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = svm_struct_learn.m; sourceTree = "<group>"; tabWidth = 2; };
+		2D002F98104FCC3200981B2C /* svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; lineEnding = 0; path = svm_struct_learn.m; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2D002F99104FCC3200981B2C /* svm_struct_learn_custom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn_custom.c; sourceTree = "<group>"; tabWidth = 8; };
-		2D002F9A104FCC3200981B2C /* test_svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = test_svm_struct_learn.m; sourceTree = "<group>"; tabWidth = 2; };
-		2D002F9B104FCC3200981B2C /* test_svm_struct_learn_ker.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; path = test_svm_struct_learn_ker.m; sourceTree = "<group>"; tabWidth = 2; };
+		2D002F9A104FCC3200981B2C /* test_svm_struct_learn.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; lineEnding = 0; path = test_svm_struct_learn.m; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		2D002F9B104FCC3200981B2C /* test_svm_struct_learn_ker.m */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; lineEnding = 0; path = test_svm_struct_learn_ker.m; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2D0030081050194100981B2C /* svm_struct_learn_mex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = svm_struct_learn_mex.c; sourceTree = "<group>"; };
+		2D60637D13C8CAB70083CAB2 /* README_MATLAB.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README_MATLAB.txt; sourceTree = "<group>"; wrapsLines = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		2D002F66104FCBBE00981B2C = {
 			isa = PBXGroup;
 			children = (
+				2D60637D13C8CAB70083CAB2 /* README_MATLAB.txt */,
 				2D002F7B104FCC3200981B2C /* Makefile */,
 				2D002F7C104FCC3200981B2C /* svm_light */,
 				2D002F8B104FCC3200981B2C /* svm_struct */,

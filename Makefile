@@ -3,29 +3,76 @@
 # author: Andrea Vedaldi
 
 MEX ?= mex
-MATLABROOT := $(shell $(MEX) -v 2>&1 | grep "MATLAB  * =" | sed 's/->.*= //g')
-MEXEXT := $(shell $(MATLABROOT)/bin/mexext)
-MEXFLAGS := -largeArrayDims CFLAGS='$$CFLAGS $(CFLAGS) -Wall'
 
-.PHONY: all
-all: svm_struct_learn.$(MEXEXT)
+# --------------------------------------------------------------------
+#                                             Auto-detect architecture
+# --------------------------------------------------------------------
+
+Darwin_PPC_ARCH := mac
+Darwin_Power_Macintosh_ARCH := mac
+Darwin_i386_ARCH := maci64
+Linux_i386_ARCH := glnx86
+Linux_i686_ARCH := glnx86
+Linux_unknown_ARC := glnx86
+Linux_x86_64_ARCH := glnxa64
+
+UNAME := $(shell uname -sm)
+ARCH ?= $($(shell echo "$(UNAME)" | tr \  _)_ARCH)
+
+# Mac OS X Intel 32
+ifeq ($(ARCH),maci)
+SDKROOT ?= /Developer/SDKs/MacOSX10.6.sdk
+MACOSX_DEPLOYMENT_TARGET ?= 10.4
+CFLAGS += -m32 -isysroot $(SDKROOT) -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+LDFLAGS += --mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+MEXEXT = mexmaci
+endif
+
+# Mac OS X Intel 64
+ifeq ($(ARCH),maci64)
+SDKROOT ?= /Developer/SDKs/MacOSX10.6.sdk
+MACOSX_DEPLOYMENT_TARGET ?= 10.4
+CFLAGS += -m64 -isysroot $(SDKROOT) -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+LDFLAGS += -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+MEXEXT = mexmaci64
+endif
+
+# Linux-32
+ifeq ($(ARCH),glnx86)
+CFLAGS  += -march=i686
+LDFLAGS +=
+MEXEXT = mexglx
+endif
+
+# Linux-64
+ifeq ($(ARCH),glnxa64)
+LDFLAGS +=
+MEXEXT = mexa64
+endif
+
+MEXFLAGS = -largeArrayDims -$(ARCH) CFLAGS='$$CFLAGS $(CFLAGS) -Wall' LDFLAGS='$$LDFLAGS $(LDFLAGS)'
+BUILD = build/$(ARCH)
+
+# --------------------------------------------------------------------
+#                                                                Build
+# --------------------------------------------------------------------
 
 svm_light_objs := \
-  svm_light/svm_hideo.o \
-  svm_light/svm_learn.o \
-  svm_light/svm_common.o
+$(BUILD)/svm_light/svm_hideo.o \
+$(BUILD)/svm_light/svm_learn.o \
+$(BUILD)/svm_light/svm_common.o
 
 svm_struct_objs := \
-  svm_struct/svm_struct_learn.o \
-  svm_struct/svm_struct_common.o
+$(BUILD)/svm_struct/svm_struct_learn.o \
+$(BUILD)/svm_struct/svm_struct_common.o
 
 svm_custom_objs := \
-  svm_struct_api.o \
-  svm_struct_learn_custom.o
+$(BUILD)/svm_struct_api.o \
+$(BUILD)/svm_struct_learn_custom.o
 
-%.o : %.c
+$(BUILD)/%.o : %.c
 	$(MEX) $(MEXFLAGS) -outdir "$(dir $@)" -c "$<"
-	
+
 svm_struct_learn.$(MEXEXT) : svm_struct_learn_mex.c \
   $(svm_custom_objs) \
   $(svm_light_objs) \
@@ -35,19 +82,26 @@ svm_struct_learn.$(MEXEXT) : svm_struct_learn_mex.c \
 .PHONY: clean
 clean:
 	rm -fv $(svm_custom_objs) $(svm_struct_objs) $(svm_light_objs)
+	find . -name '*~' -delete
 
 .PHONY: distclean
 distclean: clean
-	rm -fv svm_struct_learn.$(MEXEXT)
+	for ext in mexmaci mexmaci64 mexglx mexa64 ; \
+	do \
+	  rm -fv svm_struct_learn.$${ext} ; \
+	done
+	rm -rf build
 
 # svm_struct dependencies
 svm_struct_api.o: \
+  $(BUILD)/.dir \
   svm_struct_api.c \
   svm_struct_api.h \
   svm_struct_api_types.h \
   svm_struct/svm_struct_common.h
 
 svm_struct_learn_custom.o: \
+  $(BUILD)/.dir \
   svm_struct_learn_custom.c \
   svm_struct_api.h \
   svm_struct_api_types.h \
@@ -55,15 +109,18 @@ svm_struct_learn_custom.o: \
   svm_struct/svm_struct_common.h
 
 svm_struct/svm_struct_mex.o : \
+  $(BUILD)/.dir \
   svm_struct/svm_struct_mex.c
 
 svm_struct/svm_struct_common.o : \
+  $(BUILD)/.dir \
   svm_struct/svm_struct_common.c \
   svm_struct/svm_struct_common.h \
   svm_light/svm_common.h \
   svm_struct_api_types.h
 
 svm_struct/svm_struct_learn.o : \
+  $(BUILD)/.dir \
   svm_struct/svm_struct_learn.c \
   svm_struct/svm_struct_common.h \
   svm_light/svm_common.h \
@@ -72,6 +129,7 @@ svm_struct/svm_struct_learn.o : \
   svm_struct_api.h
 
 svm_struct/svm_struct_classify.o : \
+  $(BUILD)/.dir \
   svm_struct/svm_struct_classify.c \
   svm_struct/svm_struct_common.h \
   svm_light/svm_common.h \
@@ -80,15 +138,18 @@ svm_struct/svm_struct_classify.o : \
 
 # svm_light dependencies
 svm_light/svm_learn.o : \
+  $(BUILD)/.dir \
   svm_light/svm_learn.c \
   svm_light/svm_learn.h \
   svm_light/svm_common.h
 
 svm_light/svm_common.o : \
+  $(BUILD)/.dir \
   svm_light/svm_common.c \
   svm_light/svm_common.h \
   svm_light/kernel.h
 
 svm_light/svm_hideo.o : \
+  $(BUILD)/.dir \
   svm_light/svm_hideo.c
 
