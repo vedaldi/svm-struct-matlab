@@ -1,3 +1,15 @@
 *.o
 *.mex*
 .DS_Store
+
+*.pbxuser
+*.perspective
+*.perspectivev3
+
+build/
+
+*.mode1v3
+*.mode2v3
+
+svm-struct-matlab.xcodeproj/xcuserdata/
+svm-struct-matlab.xcodeproj/project.xcworkspace/xcuserdata/
