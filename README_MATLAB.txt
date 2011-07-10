@@ -6,6 +6,13 @@ This is a patch to Thorsten Joachims (http://www.joachims.org/)
 SVM-struct implementation that provides a simple-to-use MATLAB
 interface.
 
+OBTAINING:
+
+svm-struct-matlab homepage is
+http://www.vlfeat.org/~vedaldi/code/svm-struct-matlab.html. The GIT
+repository of the project can be downloaded at
+https://github.com/vedaldi/svm-srtuct-matlab.
+
 COMPILING:
 
 To compile this software use the included Makefile. It should work out
@@ -43,12 +50,17 @@ constraint violation search, the loss, and the feature map. See
 TEST_SVM_STRUCT_LEARN and TEST_SVM_STRUCT_LEARN_KER for example usage
 and SVM_STRUCT_LEARN built-in help for further information.
 
+CHANGES:
+
+1.0 - Initial public release
+
 LICENSE:
 
-The MATLAB interface to T. Joachim's SVM^struct is distributed under
-the following license.  This license covers only the additions to
-T. Joachims code that constitute the MATLAB interface (the "Software")
-and does not cover SVM^struct itself.
+The MATLAB wrapper of T. Joachim's SVM^struct is distributed under the
+following ``MIT license''.  This license covers only the additions to
+T. Joachims SVM^struct code that constitute the MATLAB interface (the
+"Software") and does not cover SVM^struct itself. See the file
+LICENSE.txt for the SVM^struct license.
 
 Copyright (C) 2011 by Andrea Vedaldi
 
