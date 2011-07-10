@@ -1,5 +1,4 @@
-*.o
-*.mex*
+svm_struct_learn.mex*
 .DS_Store
 
 *.pbxuser
@@ -13,3 +12,5 @@ build/
 
 svm-struct-matlab.xcodeproj/xcuserdata/
 svm-struct-matlab.xcodeproj/project.xcworkspace/xcuserdata/
+
+svm-struct-matlab-*.tar.gz
