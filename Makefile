@@ -98,6 +98,11 @@ distclean: clean
 .PHONY: dist
 dist:
 	git archive --format=tar --prefix=$(PACKAGE)-$(VER)/ v$(VER) | gzip >$(PACKAGE)-$(VER).tar.gz
+	@if [ -n "$$(git diff v$(VER) HEAD)" ] ; \
+	then \
+	   echo "Warning: the repository HEAD is not the same as the tag v$(VER)" ; \
+	fi
+
 
 # svm_struct dependencies
 svm_struct_api.o: \
