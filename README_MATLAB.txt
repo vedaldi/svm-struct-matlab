@@ -3,13 +3,14 @@
                             Andrea Vedaldi
 
 This is a patch to Thorsten Joachims (http://www.joachims.org/)
-SVM-struct implementation that provides a simple MATLAB interface.
+SVM-struct implementation that provides a simple-to-use MATLAB
+interface.
 
 COMPILING:
 
 To compile this software use the included Makefile. It should work out
-of the box on Linux and Mac OS X provied that MATLAB MEX program is in
-the command line path. So just issue
+of the box on Linux and Mac OS X provided that MATLAB MEX program is
+in the command line path. So just issue
 
 > make
 
@@ -38,7 +39,7 @@ USAGE:
 
 There is only one MATLAB command, i.e. SVM_STRUCT_LEARN. This commands
 take as input handles to the function implementing the maximal
-constriant violation search et simila. See TEST_SVM_STRUCT_LEARN and
-TEST_SVM_STRUCT_LEARN_KER for example usage and SVM_STRUCT_LEARN
-builtin help for further informatinon.
+constraint violation search, the loss, and the feature map. See
+TEST_SVM_STRUCT_LEARN and TEST_SVM_STRUCT_LEARN_KER for example usage
+and SVM_STRUCT_LEARN built-in help for further information.
 

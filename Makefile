@@ -3,6 +3,8 @@
 # author: Andrea Vedaldi
 
 MEX ?= mex
+VER = 1.0
+PACKAGE = svm-struct-matlab
 
 # --------------------------------------------------------------------
 #                                             Auto-detect architecture
@@ -91,6 +93,11 @@ distclean: clean
 	  rm -fv svm_struct_learn.$${ext} ; \
 	done
 	rm -rf build
+	rm -rf $(PACKAGE)-*.tar.gz
+
+.PHONY: dist
+dist:
+	git archive --format=tar --prefix=$(PACKAGE)-$(VER)/ v$(VER) | gzip >$(PACKAGE)-$(VER).tar.gz
 
 # svm_struct dependencies
 svm_struct_api.o: \
