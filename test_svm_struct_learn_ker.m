@@ -35,7 +35,7 @@ function test_svm_struct_learn_ker
   parm.kernelFn = @kernelCB ;
   parm.verbose = 1 ;
   model = svm_struct_learn(' -c 1.0 -o 1 -v 1 -t 4 ', parm) ;
-  w = cat(2, model.svPatterns{:}) * (model.alpha .* cat(1, model.svLabels{:})) ;
+  w = cat(2, model.svPatterns{:}) * (model.alpha .* cat(1, model.svLabels{:})) / 2 ;
 
   % ------------------------------------------------------------------
   %                                                              Plots
@@ -53,6 +53,7 @@ function test_svm_struct_learn_ker
       'color', 'y', 'linewidth', 2, 'linestyle', '-') ;
   axis equal ;
   set(gca, 'color', 'b') ;
+  w
 end
 
 % --------------------------------------------------------------------
@@ -68,10 +69,10 @@ function delta = lossCB(param, y, ybar)
 end
 
 function k = kernelCB(param, x,y, xp, yp)
-  k = x' * xp * y * yp ;
+  k = x' * xp * y * yp / 4 ;
 end
 
-function ybar = constraintCB(param, model, x, y)
+function yhat = constraintCB(param, model, x, y)
 % slack resaling: argmax_y delta(yi, y) (1 + <psi(x,y), w> - <psi(x,yi), w>)
 % margin rescaling: argmax_y delta(yi, y) + <psi(x,y), w>
 
@@ -79,11 +80,11 @@ function ybar = constraintCB(param, model, x, y)
   if size(model.svPatterns, 2) == 0
     w = zeros(size(x)) ;
   else
-    w = cat(2, model.svPatterns{:}) * (model.alpha .* cat(1, model.svLabels{:})) ;
+    w = [model.svPatterns{:}] * (model.alpha .* [model.svLabels{:}]') / 2 ;
   end
-  if dot(y*x, w) > .5, ybar = y ; else ybar = -y ; end
+  if dot(y*x, w) > 1, yhat = y ; else yhat = -y ; end
   if param.verbose
-    fprintf('ybar = violslack([%8.3f,%8.3f], [%8.3f,%8.3f], %3d) = %3d\n', ...
-            w, x, y, ybar) ;
+    fprintf('yhat = violslack([%8.3f,%8.3f], [%8.3f,%8.3f], %3d) = %3d\n', ...
+            w, x, y, yhat) ;
   end
 end

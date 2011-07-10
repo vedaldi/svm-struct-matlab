@@ -1,6 +1,6 @@
 function test_svm_struct_learn
-% TEST_SVM_STRUCT_LEARN=
-%   Test function for SVM_STRUCT_LEARN(). It shows how to use
+% TEST_SVM_STRUCT_LEARN
+%   A demo function for SVM_STRUCT_LEARN(). It shows how to use
 %   SVM-struct to learn a standard linear SVM.
 
   randn('state',0) ;
@@ -53,6 +53,7 @@ function test_svm_struct_learn
       'color', 'y', 'linewidth', 2, 'linestyle', '-') ;
   axis equal ;
   set(gca, 'color', 'b') ;
+  w
 end
 
 % ------------------------------------------------------------------
@@ -66,34 +67,20 @@ function delta = lossCB(param, y, ybar)
   end
 end
 
-function w = featureCB(param, x, y)
-  w = sparse(y*x) ;
+function psi = featureCB(param, x, y)
+  psi = sparse(y*x/2) ;
   if param.verbose
     fprintf('w = psi([%8.3f,%8.3f], %3d) = [%8.3f, %8.3f]\n', ...
-            x, y, full(w(1)), full(w(2))) ;
+            x, y, full(psi(1)), full(psi(2))) ;
   end
 end
 
-function ybar = constraintCB(param, model, x, y)
+function yhat = constraintCB(param, model, x, y)
 % slack resaling: argmax_y delta(yi, y) (1 + <psi(x,y), w> - <psi(x,yi), w>)
 % margin rescaling: argmax_y delta(yi, y) + <psi(x,y), w>
-  w = model.w ;
-  if dot(y*x, w) > .5
-    ybar = y ;
-  else
-    ybar = - y ;
-  end
+  if dot(y*x, model.w) > 1, yhat = y ; else yhat = - y ; end
   if param.verbose
-    fprintf('ybar = violslack([%8.3f,%8.3f], [%8.3f,%8.3f], %3d) = %3d\n', ...
-            w, x, y, ybar) ;
-  end
-end
-
-function y = classifyCB(param, model, x)
-  w = model.w ;
-  y = sign(dot(w,x)) ;
-  if param.verbose
-    fprintf('y = classify([%f,%f], [%f,$f]) = %f\n', ...
-            w,x,y) ;
+    fprintf('yhat = violslack([%8.3f,%8.3f], [%8.3f,%8.3f], %3d) = %3d\n', ...
+            model.w, x, y, yhat) ;
   end
 end
