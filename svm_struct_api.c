@@ -449,12 +449,13 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
 
     {
       double * data = mxGetPr(out) ;
+      int i ;
       mwIndex * colOffsets = mxGetJc(out) ;
       mwIndex * rowIndexes = mxGetIr(out) ;
       int numNZ = colOffsets[1] - colOffsets[0] ;
 
       words = (WORD*) my_malloc (sizeof(WORD) * (numNZ + 1)) ;
-      int i ;
+
       for (i = 0 ; i < numNZ ; ++ i) {
         words[i].wnum = rowIndexes[i] + 1 ;
         words[i].weight = data[i] ;

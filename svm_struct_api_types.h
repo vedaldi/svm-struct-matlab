@@ -22,7 +22,19 @@
 
 # include "svm_light/svm_common.h"
 # include "svm_light/svm_learn.h"
-# include <strings.h>
+
+# ifndef WIN
+# include "strings.h"
+# else
+# include <string.h>
+# endif
+
+#ifndef WIN
+#define inline_comm __inline__
+#else
+#define inline_comm __inline
+#endif
+
 
 typedef struct MexKernelInfo_
 {
@@ -30,8 +42,7 @@ typedef struct MexKernelInfo_
   mxArray const * kernelFn ;
 } MexKernelInfo ;
 
-
-__inline__ static int
+inline_comm static int
 uIsString(const mxArray* A, int L)
 {
   int M = mxGetM(A) ;
@@ -42,21 +53,23 @@ uIsString(const mxArray* A, int L)
     (M == 1 || (M == 0 && N == 0)) &&
     (L < 0 || N == L) ;
 }
-__inline__ static int
+
+inline_comm static int
 uIsReal (const mxArray* A)
 {
   return
     mxIsDouble(A) &&
     ! mxIsComplex(A) ;
 }
-__inline__ static int
+
+inline_comm static int
 uIsRealScalar(const mxArray* A)
 {
   return
     uIsReal (A) && mxGetNumberOfElements(A) == 1 ;
 }
 
-__inline__ static mxArray *
+inline_comm static mxArray *
 newMxArrayFromDoubleVector (int n, double const* v)
 {
   mxArray* array = mxCreateDoubleMatrix(n, 1, mxREAL) ;
@@ -64,7 +77,7 @@ newMxArrayFromDoubleVector (int n, double const* v)
   return (array) ;
 }
 
-__inline__ static mxArray *
+inline_comm static mxArray *
 newMxArrayFromSvector (int n, SVECTOR const* sv)
 {
   WORD* wi ;
@@ -91,9 +104,15 @@ newMxArrayFromSvector (int n, SVECTOR const* sv)
     *ir ++  = wi -> wnum ;
     if (wi -> wnum > n) {
       char str [512] ;
-      snprintf(str, sizeof(str), 
+      #ifndef WIN
+      snprintf(str, sizeof(str),
                "Component index %d larger than sparse vector dimension %d", 
                wi -> wnum, n) ;
+      #else
+      sprintf(str, sizeof(str),
+               "Component index %d larger than sparse vector dimension %d",
+               wi -> wnum, n) ;
+      #endif
       mexErrMsgTxt(str) ;
     }
   }
@@ -185,12 +204,15 @@ typedef struct struct_learn_parm {
 } STRUCT_LEARN_PARM ;
 
 typedef struct struct_test_stats {
+#ifdef WIN
+ int dum;
+#endif
   /* you can add variables for keeping statistics when evaluating the
      test predictions in svm_struct_classify. This can be used in the
      function eval_prediction and print_struct_testing_stats. */
 } STRUCT_TEST_STATS;
 
-__inline__ static mxArray *
+inline_comm static mxArray *
 newMxArrayEncapsulatingDoubleVector (int n, double * v)
 {
 #if 1
@@ -204,9 +226,13 @@ newMxArrayEncapsulatingDoubleVector (int n, double * v)
 #endif
 }
 
-__inline__ static mxArray *
+inline_comm static mxArray *
 newMxArrayEncapsulatingSmodel (STRUCTMODEL * smodel)
 {
+  mxArray * alpha_array;
+  mxArray * svPatterns_array;
+  mxArray * svLabels_array;
+
   mwSize dims [] = {1, 1} ;
   char const * fieldNames [] = {
     "w", "alpha", "svPatterns", "svLabels"
@@ -232,10 +258,10 @@ newMxArrayEncapsulatingSmodel (STRUCTMODEL * smodel)
       ++ numFeatures ; 
       }
     }
-    
-    mxArray * alpha_array = mxCreateDoubleMatrix (numFeatures, 1, mxREAL) ;
-    mxArray * svPatterns_array = mxCreateCellMatrix (1, numFeatures) ;
-    mxArray * svLabels_array = mxCreateCellMatrix (1, numFeatures) ;
+
+    alpha_array = mxCreateDoubleMatrix (numFeatures, 1, mxREAL) ;
+    svPatterns_array = mxCreateCellMatrix (1, numFeatures) ;
+    svLabels_array = mxCreateCellMatrix (1, numFeatures) ;
     
     /* fill in the values */
     alpha = mxGetPr (alpha_array) ;
@@ -256,7 +282,7 @@ newMxArrayEncapsulatingSmodel (STRUCTMODEL * smodel)
   return smodel_array ;
 }
 
-__inline__ static void
+inline_comm static void
 destroyMxArrayEncapsulatingDoubleVector (mxArray * array)
 {
   if (array) {
@@ -267,7 +293,7 @@ destroyMxArrayEncapsulatingDoubleVector (mxArray * array)
   }
 }
 
-__inline__ static void
+inline_comm static void
 destroyMxArrayEncapsulatingSmodel (mxArray * array)
 {
   if (array) {

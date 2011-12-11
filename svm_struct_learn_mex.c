@@ -62,6 +62,17 @@ mexFunction (int nout, mxArray ** out, int nin, mxArray const ** in)
   enum {IN_ARGS=0, IN_SPARM} ;
   enum {OUT_W=0} ;
 
+  char arg [1024 + 1] ;
+  int argc ;
+  char ** argv ;
+
+  mxArray const * sparm_array;
+  mxArray const * patterns_array ;
+  mxArray const * labels_array ;
+  mxArray const * kernelFn_array ;
+  int numExamples, ei ;
+  mxArray * model_array;
+
   /* SVM-light is not fully reentrant, so we need to run this patch first */
   init_qp_solver() ;
   verbosity = 0 ;
@@ -72,9 +83,6 @@ mexFunction (int nout, mxArray ** out, int nin, mxArray const ** in)
   }
 
   /* Parse ARGS  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  char arg [1024 + 1] ;
-  int argc ;
-  char ** argv ;
 
   if (! uIsString(in[IN_ARGS], -1)) {
     mexErrMsgTxt("ARGS must be a string") ;
@@ -96,11 +104,8 @@ mexFunction (int nout, mxArray ** out, int nin, mxArray const ** in)
   }
 
   /* Parse SPARM ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  mxArray const * sparm_array = in [IN_SPARM] ;
-  mxArray const * patterns_array ;
-  mxArray const * labels_array ;
-  mxArray const * kernelFn_array ;
-  int numExamples, ei ;
+  sparm_array = in [IN_SPARM] ;
+  // jk remove
 
   if (! sparm_array) {
     mexErrMsgTxt("SPARM must be a structure") ;
@@ -180,7 +185,8 @@ mexFunction (int nout, mxArray ** out, int nin, mxArray const ** in)
      If you want to free the original data, and only keep the model, you
      have to make a deep copy of 'model'. */
 
-  mxArray * model_array = newMxArrayEncapsulatingSmodel (&structmodel) ;
+  // jk change
+  model_array = newMxArrayEncapsulatingSmodel (&structmodel) ;
   out[OUT_W] = mxDuplicateArray (model_array) ;
   destroyMxArrayEncapsulatingSmodel (model_array) ;
   
@@ -285,8 +291,13 @@ read_input_parameters (int argc,char *argv[],
       default:
         {
           char msg [1024+1] ;
-          snprintf(msg, sizeof(msg)/sizeof(char),
+          #ifndef WIN
+            snprintf(msg, sizeof(msg)/sizeof(char),
                    "Unrecognized option '%s'",argv[i]) ;
+          #else
+           sprintf(msg, sizeof(msg)/sizeof(char),
+                   "Unrecognized option '%s'",argv[i]) ;
+          #endif
           mexErrMsgTxt(msg) ;
         }
       }
@@ -295,8 +306,13 @@ read_input_parameters (int argc,char *argv[],
   /* whatever is left is an error */
   if (i < argc) {
     char msg [1024+1] ;
-    snprintf(msg, sizeof(msg)/sizeof(char),
+    #ifndef WIN
+        snprintf(msg, sizeof(msg)/sizeof(char),
              "Unrecognized argument '%s'", argv[i]) ;
+    #else
+        sprintf(msg, sizeof(msg)/sizeof(char),
+             "Unrecognized argument '%s'", argv[i]) ;
+    #endif
     mexErrMsgTxt(msg) ;
   }
 
@@ -316,23 +332,41 @@ read_input_parameters (int argc,char *argv[],
   }
   if((learn_parm->svm_maxqpsize<2)) {
     char msg [1025] ;
+    #ifndef WIN
     snprintf(msg, sizeof(msg)/sizeof(char),
              "Maximum size of QP-subproblems not in valid range: %ld [2..]",learn_parm->svm_maxqpsize) ;
+    #else
+    sprintf(msg, sizeof(msg)/sizeof(char),
+            "Maximum size of QP-subproblems not in valid range: %ld [2..]",learn_parm->svm_maxqpsize) ;
+    #endif
     mexErrMsgTxt(msg) ;
   }
   if((learn_parm->svm_maxqpsize<learn_parm->svm_newvarsinqp)) {
     char msg [1025] ;
+    #ifndef WIN
     snprintf(msg, sizeof(msg)/sizeof(char),
              "Maximum size of QP-subproblems [%ld] must be larger than the number of"
              " new variables [%ld] entering the working set in each iteration.",
              learn_parm->svm_maxqpsize, learn_parm->svm_newvarsinqp) ;
+    #else
+    sprintf(msg, sizeof(msg)/sizeof(char),
+             "Maximum size of QP-subproblems [%ld] must be larger than the number of"
+             " new variables [%ld] entering the working set in each iteration.",
+             learn_parm->svm_maxqpsize, learn_parm->svm_newvarsinqp) ;
+    #endif
     mexErrMsgTxt(msg) ;
   }
   if(learn_parm->svm_iter_to_shrink<1) {
     char msg [1025] ;
+    #ifndef WIN
     snprintf(msg, sizeof(msg)/sizeof(char),
              "Maximum number of iterations for shrinking not in valid range: %ld [1,..]",
              learn_parm->svm_iter_to_shrink);
+    #else
+    sprintf(msg, sizeof(msg)/sizeof(char),
+             "Maximum number of iterations for shrinking not in valid range: %ld [1,..]",
+             learn_parm->svm_iter_to_shrink);
+    #endif
     mexErrMsgTxt(msg) ;
   }
   if(struct_parm->C<0) {

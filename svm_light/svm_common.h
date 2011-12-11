@@ -35,7 +35,13 @@ struct MexPhiCustomImpl_
 
 typedef struct MexPhiCustomImpl_ * MexPhiCustom ;
 
-__inline__ static MexPhiCustom
+#ifndef WIN
+#define inline_comm __inline__
+#else
+#define inline_comm __inline
+#endif
+
+inline_comm static MexPhiCustom
 newMexPhiCustomFromPatternLabel (mxArray const * x, mxArray const *y)
 {
   MexPhiCustom phi ;
@@ -46,7 +52,7 @@ newMexPhiCustomFromPatternLabel (mxArray const * x, mxArray const *y)
   return phi ;
 }
 
-__inline__ static void
+inline_comm static void
 releaseMexPhiCustom (MexPhiCustom phi)
 {
   if (phi) {
@@ -59,20 +65,20 @@ releaseMexPhiCustom (MexPhiCustom phi)
   }
 }
 
-__inline__ static void
+inline_comm static void
 retainMexPhiCustom (MexPhiCustom phi) {
   if (phi) {
     phi -> counter ++ ;
   }
 }
 
-__inline__ static mxArray * 
+inline_comm static mxArray *
 MexPhiCustomGetPattern (MexPhiCustom phi) {
   assert (phi) ;
   return phi -> x ;
 }
 
-__inline__ static mxArray * 
+inline_comm static mxArray *
 MexPhiCustomGetLabel (MexPhiCustom phi) {
   assert (phi) ;
   return phi -> y ;
