@@ -52,6 +52,7 @@ and SVM_STRUCT_LEARN built-in help for further information.
 
 CHANGES:
 
+1.1 - Adds Windows support (thanks to Iasonas Kokkinos).
 1.0 - Initial public release
 
 LICENSE:
