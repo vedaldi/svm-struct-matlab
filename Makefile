@@ -13,6 +13,7 @@ PACKAGE = svm-struct-matlab
 Darwin_PPC_ARCH := mac
 Darwin_Power_Macintosh_ARCH := mac
 Darwin_i386_ARCH := maci64
+Darwin_x86_64_ARCH := maci64
 Linux_i386_ARCH := glnx86
 Linux_i686_ARCH := glnx86
 Linux_unknown_ARC := glnx86
@@ -23,16 +24,16 @@ ARCH ?= $($(shell echo "$(UNAME)" | tr \  _)_ARCH)
 
 # Mac OS X Intel 32
 ifeq ($(ARCH),maci)
-SDKROOT ?= /Developer/SDKs/MacOSX10.6.sdk
+SDKROOT ?= /Developer/SDKs/MacOSX10.7.sdk
 MACOSX_DEPLOYMENT_TARGET ?= 10.4
 CFLAGS += -m32 -isysroot $(SDKROOT) -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
-LDFLAGS += --mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+LDFLAGS += -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
 MEXEXT = mexmaci
 endif
 
 # Mac OS X Intel 64
 ifeq ($(ARCH),maci64)
-SDKROOT ?= /Developer/SDKs/MacOSX10.6.sdk
+SDKROOT ?= /Developer/SDKs/MacOSX10.7.sdk
 MACOSX_DEPLOYMENT_TARGET ?= 10.4
 CFLAGS += -m64 -isysroot $(SDKROOT) -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
 LDFLAGS += -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
