@@ -3,7 +3,7 @@
 # author: Andrea Vedaldi
 
 MEX ?= mex
-VER = 1.1
+VER = 1.2
 PACKAGE = svm-struct-matlab
 
 # --------------------------------------------------------------------
@@ -24,20 +24,24 @@ ARCH ?= $($(shell echo "$(UNAME)" | tr \  _)_ARCH)
 
 # Mac OS X Intel 32
 ifeq ($(ARCH),maci)
-SDKROOT ?= /Developer/SDKs/MacOSX10.7.sdk
+SDKROOT ?= $(shell xcodebuild -version -sdk macosx | sed -n '/^Path\:/p' | sed 's/^Path: //')
 MACOSX_DEPLOYMENT_TARGET ?= 10.4
 CFLAGS += -m32 -isysroot $(SDKROOT) -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
-LDFLAGS += -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+LDFLAGS += -Wl,-syslibroot,$(SDKROOT) -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
 MEXEXT = mexmaci
+CC = gcc
+MEXFLAGS += CC='$(CC)' LD='$(CC)'
 endif
 
 # Mac OS X Intel 64
 ifeq ($(ARCH),maci64)
-SDKROOT ?= /Developer/SDKs/MacOSX10.7.sdk
+SDKROOT ?= $(shell xcodebuild -version -sdk macosx | sed -n '/^Path\:/p' | sed 's/^Path: //')
 MACOSX_DEPLOYMENT_TARGET ?= 10.4
 CFLAGS += -m64 -isysroot $(SDKROOT) -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
-LDFLAGS += -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+LDFLAGS += -Wl,-syslibroot,$(SDKROOT) -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
 MEXEXT = mexmaci64
+CC = gcc
+MEXFLAGS += CC='$(CC)' LD='$(CC)'
 endif
 
 # Linux-32
@@ -53,7 +57,7 @@ LDFLAGS +=
 MEXEXT = mexa64
 endif
 
-MEXFLAGS = -largeArrayDims -$(ARCH) CFLAGS='$$CFLAGS $(CFLAGS) -Wall' LDFLAGS='$$LDFLAGS $(LDFLAGS)'
+MEXFLAGS += -largeArrayDims -$(ARCH) CFLAGS='$$CFLAGS $(CFLAGS) -Wall' LDFLAGS='$$LDFLAGS $(LDFLAGS)'
 BUILD = build/$(ARCH)
 
 # --------------------------------------------------------------------

@@ -1,5 +1,5 @@
                         SVM^struct for MATLAB
-                                 V1.0
+                                 V1.2
                             Andrea Vedaldi
 
 This is a patch to Thorsten Joachims (http://www.joachims.org/)
@@ -52,6 +52,7 @@ and SVM_STRUCT_LEARN built-in help for further information.
 
 CHANGES:
 
+1.2 - Adds support for Xcode 4.0 and Mac OS X 10.7 and greater
 1.1 - Adds Windows support (thanks to Iasonas Kokkinos).
 1.0 - Initial public release
 
