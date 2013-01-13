@@ -567,7 +567,7 @@ finalize_iteration (double ceps, int cached_constraint,
   destroyMxArrayEncapsulatingSmodel (model_array) ;
 
   if (status) {
-    mexErrMsgTxt("Error while executing PARM.LOSSFN") ;
+    mexErrMsgTxt("Error while executing PARM.ENDITERATIONFN") ;
   }
 
   if (! uIsLogicalScalar(out)) {
