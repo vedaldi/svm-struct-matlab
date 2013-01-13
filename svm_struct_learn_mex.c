@@ -143,7 +143,7 @@ mexFunction (int nout, mxArray ** out, int nin, mxArray const ** in)
 
   kernelFn_array = mxGetField(sparm_array, 0, "kernelFn") ;
   if (! kernelFn_array && kernel_parm.kernel_type == CUSTOM) {
-    mexErrMsgTxt("SPARM.KERNELFN must be define for CUSTOM kernels") ;
+    mexErrMsgTxt("SPARM.KERNELFN must be defined for CUSTOM kernels") ;
   }
   if (kernelFn_array) {
     MexKernelInfo * info ;

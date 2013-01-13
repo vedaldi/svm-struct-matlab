@@ -69,6 +69,13 @@ uIsRealScalar(const mxArray* A)
     uIsReal (A) && mxGetNumberOfElements(A) == 1 ;
 }
 
+inline_comm static int
+uIsLogicalScalar(const mxArray* A)
+{
+  return
+  mxIsLogical(A) && mxGetNumberOfElements(A) == 1 ;
+}
+
 inline_comm static mxArray *
 newMxArrayFromDoubleVector (int n, double const* v)
 {

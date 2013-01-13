@@ -541,7 +541,41 @@ finalize_iteration (double ceps, int cached_constraint,
                     CONSTSET cset, double *alpha,
                     STRUCT_LEARN_PARM *sparm)
 {
-  return (0) ;
+  mxArray* fn_array ;
+  mxArray* model_array ;
+  mxArray* out ;
+  mxArray* args [3] ;
+  int status ;
+  int result = 0 ;
+
+  fn_array = mxGetField(sparm->mex, 0, "endIterationFn") ;
+
+  if (! fn_array) return 0 ;
+  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+    mexErrMsgTxt("PARM.ENDITERATIONFN must be a valid function handle") ;
+  }
+
+  /* encapsulate sm->w into a Matlab array */
+  model_array = newMxArrayEncapsulatingSmodel (sm) ;
+
+  args[0] = fn_array ;
+  args[1] = (mxArray*) sparm->mex ; /* model (discard conts) */
+  args[2] = model_array ;
+
+  status = mexCallMATLAB (1, &out, 3, args, "feval") ;
+
+  destroyMxArrayEncapsulatingSmodel (model_array) ;
+
+  if (status) {
+    mexErrMsgTxt("Error while executing PARM.LOSSFN") ;
+  }
+
+  if (! uIsLogicalScalar(out)) {
+    mexErrMsgTxt("PARM.ENDITERATIONFN must reutrn nothing or a scalar") ;
+  }
+  result = (int) (*mxGetLogicals(out)) ;
+  mxDestroyArray(out) ;
+  return result ;
 }
 
 /** ------------------------------------------------------------------
