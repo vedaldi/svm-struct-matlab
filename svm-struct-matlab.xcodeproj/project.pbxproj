@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXFileReference section */
@@ -105,8 +105,11 @@
 /* Begin PBXProject section */
 		2D002F68104FCBBE00981B2C /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
 			buildConfigurationList = 2D002F6B104FCBBE00981B2C /* Build configuration list for PBXProject "svm-struct-matlab" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -135,10 +138,10 @@
 				DOXYGEN = doxygen;
 				HEADER_SEARCH_PATHS = "$(MATLABROOT)/extern/include";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				MATLABROOT = /Applications/Matlab09B.app;
+				MATLABROOT = /Applications/Matlab_R2011A.app;
 				MEX = "$(MATLABROOT)/bin/mex";
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -155,24 +158,25 @@
 				DOXYGEN = doxygen;
 				HEADER_SEARCH_PATHS = "$(MATLABROOT)/extern/include";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				MATLABROOT = /Applications/Matlab09B.app;
+				MATLABROOT = /Applications/Matlab_R2011A.app;
 				MEX = "$(MATLABROOT)/bin/mex";
 				NDEBUG = yes;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
 		2D002F9D104FCC8300981B2C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Debug;
 		};
 		2D002F9E104FCC8300981B2C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Release;
 		};
