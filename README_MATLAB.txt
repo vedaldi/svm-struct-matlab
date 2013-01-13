@@ -52,6 +52,7 @@ and SVM_STRUCT_LEARN built-in help for further information.
 
 CHANGES:
 
+1.3 - Adds support for the endIterationFn callback.
 1.2 - Adds support for Xcode 4.0 and Mac OS X 10.7 and greater
 1.1 - Adds Windows support (thanks to Iasonas Kokkinos).
 1.0 - Initial public release

@@ -30,6 +30,14 @@
 %       dimension PARM.DIMENSION. This handle does not need to be
 %       specified if kernels are used.
 %
+%     ENDITERATIONFN:: end iteration callback
+%       The optional callback CONTINUE = ENDITERATIONFN(PARAM, MODEL)
+%       is called at the end of each cutting plane iteration. This can
+%       be used to display diagnostic information. The callback should
+%       return a logcial value, usually equal to FALSE. If the value
+%       is TRUE, then the algorithm keeps iterating even if the
+%       convergence criterion has been satisfied.
+%
 %     DIMENSION:: dimension of the feature map
 %       The dimension of the feature map. This value does not need to
 %       be specified i kernels are used.
