@@ -105,7 +105,7 @@ mexFunction (int nout, mxArray ** out, int nin, mxArray const ** in)
 
   /* Parse SPARM ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   sparm_array = in [IN_SPARM] ;
-  // jk remove
+  /* jk remove */
 
   if (! sparm_array) {
     mexErrMsgTxt("SPARM must be a structure") ;
@@ -185,7 +185,7 @@ mexFunction (int nout, mxArray ** out, int nin, mxArray const ** in)
      If you want to free the original data, and only keep the model, you
      have to make a deep copy of 'model'. */
 
-  // jk change
+  /* jk change */
   model_array = newMxArrayEncapsulatingSmodel (&structmodel) ;
   out[OUT_W] = mxDuplicateArray (model_array) ;
   destroyMxArrayEncapsulatingSmodel (model_array) ;
