@@ -1768,7 +1768,7 @@ double get_runtime(void)
 }
 
 
-# ifdef _MSC_VER
+# if defined _MSC_VER &&  _MSC_VER < 1800 
 
 int isnan(double a)
 {
