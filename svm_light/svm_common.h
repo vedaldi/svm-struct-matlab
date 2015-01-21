@@ -443,7 +443,7 @@ double get_runtime(void);
 int    space_or_null(int);
 void   *my_malloc(size_t); 
 void   copyright_notice(void);
-# ifdef _MSC_VER
+# if defined _MSC_VER &&  _MSC_VER < 1800
    int isnan(double);
 # endif
 
