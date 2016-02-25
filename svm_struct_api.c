@@ -173,7 +173,7 @@ classify_struct_example (PATTERN x,
   if (! fn_array) {
       mexErrMsgTxt("Field PARM.CLASSIFYFN not found") ;
   }
-  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+  if (mxGetClassID(fn_array) != mxFUNCTION_CLASS) {
     mexErrMsgTxt("PARM.CLASSIFYFN must be a valid function handle") ;
   }
 
@@ -247,7 +247,7 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
   if (! fn_array) {
     mexErrMsgTxt("Field PARM.CONSTRAINTFN not found") ;
   }
-  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+  if (mxGetClassID(fn_array) != mxFUNCTION_CLASS) {
     mexErrMsgTxt("PARM.CONSTRAINTFN must be a valid function handle") ;
   }
 
@@ -325,7 +325,7 @@ find_most_violated_constraint_marginrescaling (PATTERN x, LABEL y,
   if (! fn_array) {
     mexErrMsgTxt("Field PARM.CONSTRAINTFN not found") ;
   }
-  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+  if (mxGetClassID(fn_array) != mxFUNCTION_CLASS) {
     mexErrMsgTxt("PARM.CONSTRAINTFN is not a valid function handle") ;
   }
 
@@ -422,7 +422,7 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
     if (! fn_array) {
       mexErrMsgTxt("Field PARM.FEATUREFN not found") ;
     }
-    if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+    if (mxGetClassID(fn_array) != mxFUNCTION_CLASS) {
       mexErrMsgTxt("PARM.FEATUREFN must be a valid function handle") ;
     }
 
@@ -440,9 +440,9 @@ psi (PATTERN x, LABEL y, STRUCTMODEL *sm,
     }
 
     if (! mxIsSparse(out) ||
-        ! mxGetClassID(out) == mxDOUBLE_CLASS ||
-        ! mxGetN(out) == 1 ||
-        ! mxGetM(out) == sm->sizePsi) {
+        mxGetClassID(out) != mxDOUBLE_CLASS ||
+        mxGetN(out) != 1 ||
+        mxGetM(out) != sm->sizePsi) {
       mexErrMsgTxt("PARM.FEATUREFN must return a sparse column vector "
                    "of the prescribed size") ;
     }
@@ -500,7 +500,7 @@ loss (LABEL y, LABEL ybar, STRUCT_LEARN_PARM *sparm)
   if (! fn_array) {
     mexErrMsgTxt("Field PARM.LOSSFN not found") ;
   }
-  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+  if (mxGetClassID(fn_array) != mxFUNCTION_CLASS) {
     mexErrMsgTxt("PARM.LOSSFN must be a valid function handle") ;
   }
 
@@ -551,7 +551,7 @@ finalize_iteration (double ceps, int cached_constraint,
   fn_array = mxGetField(sparm->mex, 0, "endIterationFn") ;
 
   if (! fn_array) return 0 ;
-  if (! mxGetClassID(fn_array) == mxFUNCTION_CLASS) {
+  if (mxGetClassID(fn_array) != mxFUNCTION_CLASS) {
     mexErrMsgTxt("PARM.ENDITERATIONFN must be a valid function handle") ;
   }
 

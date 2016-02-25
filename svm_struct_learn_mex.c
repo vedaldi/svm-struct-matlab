@@ -123,7 +123,7 @@ mexFunction (int nout, mxArray ** out, int nin, mxArray const ** in)
   labels_array = mxGetField(sparm_array, 0, "labels") ;
   if (! labels_array ||
       ! mxIsCell(labels_array) ||
-      ! mxGetNumberOfElements(labels_array) == numExamples) {
+      mxGetNumberOfElements(labels_array) != numExamples) {
     mexErrMsgTxt("SPARM.LABELS must be a cell array "
                  "with the same number of elements of "
                  "SPARM.PATTERNS") ;
