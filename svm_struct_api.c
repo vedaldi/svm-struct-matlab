@@ -266,9 +266,10 @@ find_most_violated_constraint_slackrescaling (PATTERN x, LABEL y,
      array, i.e. an array which cannot be destroyed by MATLAB automatic
      cleanup system, invoked when an error is raised */
 
-  mexSetTrapFlag (1) ;
-  status = mexCallMATLAB(1, &ybar.mex, 5, args, "feval") ;
-  mexSetTrapFlag (0) ;
+  // mexSetTrapFlag (1) ;
+  // status = mexCallMATLAB(1, &ybar.mex, 5, args, "feval") ;
+  // mexSetTrapFlag (0) ;
+  status = mexCallMATLABWithTrap(1, &ybar.mex, 5, args, "feval") ;
 
   destroyMxArrayEncapsulatingSmodel (model_array) ;
 
@@ -338,9 +339,10 @@ find_most_violated_constraint_marginrescaling (PATTERN x, LABEL y,
   args[3] = x.mex ;
   args[4] = y.mex ;
 
-  mexSetTrapFlag (1) ;
-  status = mexCallMATLAB(1, &ybar.mex, 5, args, "feval") ;
-  mexSetTrapFlag (0) ;
+ // mexSetTrapFlag (1) ;
+ // status = mexCallMATLAB(1, &ybar.mex, 5, args, "feval") ;
+ // mexSetTrapFlag (0) ;
+  status = mexCallMATLABWithTrap(1, &ybar.mex, 5, args, "feval") ;
 
   destroyMxArrayEncapsulatingSmodel (model_array) ;
 
